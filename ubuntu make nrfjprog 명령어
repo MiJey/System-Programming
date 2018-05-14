@@ -1,0 +1,6 @@
+cd pca10040/blank/armgcc
+make
+nrfjprog --family nRF52 -e
+nrfjprog --family nRF52 --program _build/nrf52832_xxaa.hex
+nrfjprog --family nRF52 -r
+
