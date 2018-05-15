@@ -208,4 +208,5 @@ int main(void){
 	init_st7586();
 
 	draw_rectangle(0x0A, 0x30, 0x28, 0x40);
+	draw_rectangle(5, 80, 20, 125);
 }
