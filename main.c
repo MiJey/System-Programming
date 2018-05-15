@@ -56,28 +56,26 @@ static volatile bool st7586_spi_xfer_done = false;  /**< Flag used to indicate t
 #define ST_DATA		1
 
 #define RATIO_SPI0_LCD_SCK	4
-#define RATIO_SPI0_LCD_A0		28
+#define RATIO_SPI0_LCD_A0	28
 #define RATIO_SPI0_LCD_MOSI	29
 #define RATIO_SPI0_LCD_BSTB	30
-#define RATIO_SPI0_LCD_CS		31
+#define RATIO_SPI0_LCD_CS	31
 
 #define LCD_INIT_DELAY(t) nrf_delay_ms(t)
 
 static unsigned char rx_data;
+unsigned int i, j;
 
 /**
  * @brief SPI user event handler.
  * @param event
  */
 
-void spi_event_handler(nrf_drv_spi_evt_t const *p_event, void *p_context)
-{
+void spi_event_handler(nrf_drv_spi_evt_t const *p_event, void *p_context){
 	st7586_spi_xfer_done = true;
 }
 
-
-void st7586_write(const uint8_t category, const uint8_t data)
-{
+void st7586_write(const uint8_t category, const uint8_t data){
 	int err_code;
 	nrf_gpio_pin_write(RATIO_SPI0_LCD_A0, category);
 
@@ -90,8 +88,7 @@ void st7586_write(const uint8_t category, const uint8_t data)
 	nrf_delay_us(10);
 }
 
-static inline void st7586_pinout_setup()
-{
+static inline void pinout_setup_st7586(){
 	// spi setup
 	int err_code;
 	nrf_drv_spi_config_t spi_config = NRF_DRV_SPI_DEFAULT_CONFIG;
@@ -112,27 +109,26 @@ static inline void st7586_pinout_setup()
 	nrf_gpio_cfg_output(RATIO_SPI0_LCD_BSTB);
 }
 
-
-void Initialization_ST7586S(){
+void init_st7586(){
 	nrf_gpio_pin_write(RATIO_SPI0_LCD_BSTB, 0);
 	LCD_INIT_DELAY(50);
 	nrf_gpio_pin_write(RATIO_SPI0_LCD_BSTB, 1);
 
 	LCD_INIT_DELAY(10);
 	LCD_INIT_DELAY(120);
-	st7586_write(ST_COMMAND, 0xD7);
+	st7586_write(ST_COMMAND, 0xD7);		// Disable Auto Read
 	st7586_write(ST_DATA, 0x9F);
-	st7586_write(ST_COMMAND, 0xE0);
+	st7586_write(ST_COMMAND, 0xE0);		// Enable OTP Read
 	st7586_write(ST_DATA, 0x00);
 	LCD_INIT_DELAY(10);
-	st7586_write(ST_COMMAND, 0xE3);
+	st7586_write(ST_COMMAND, 0xE3);		// OTP Up-Load
 	LCD_INIT_DELAY(20);
-	st7586_write(ST_COMMAND, 0xE1);
-	st7586_write(ST_COMMAND, 0x11);
-	st7586_write(ST_COMMAND, 0x28);
+	st7586_write(ST_COMMAND, 0xE1);		// OTP Control Out
+	st7586_write(ST_COMMAND, 0x11);		// Sleep Out
+	st7586_write(ST_COMMAND, 0x28);		// Display OFF
 	LCD_INIT_DELAY(50);
 
-	// 부팅 수정한 부분
+	// lms에서 부팅 수정한 부분(전압 관련)
 	st7586_write(ST_COMMAND,  0xC0);
 	st7586_write(ST_DATA, 0x53);
 	st7586_write(ST_DATA, 0x01);
@@ -141,77 +137,75 @@ void Initialization_ST7586S(){
 	st7586_write(ST_COMMAND,  0xC4);
 	st7586_write(ST_DATA, 0x06);
 
-	st7586_write(ST_COMMAND, 0xD0);
+	st7586_write(ST_COMMAND, 0xD0);		// Enable Analog Circuit
 	st7586_write(ST_DATA, 0x1D);
-	st7586_write(ST_COMMAND, 0xB5);
+	st7586_write(ST_COMMAND, 0xB5);		// N-Line = 0
 	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_COMMAND, 0x39);
-	st7586_write(ST_COMMAND, 0x3A);
+	st7586_write(ST_COMMAND, 0x39);		// Monochrome Mode
+	st7586_write(ST_COMMAND, 0x3A);		// Enable DDRAM Interface
 	st7586_write(ST_DATA, 0x02);
-	st7586_write(ST_COMMAND, 0x36);
+	st7586_write(ST_COMMAND, 0x36);		// Scan Direction Setting
 	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_COMMAND, 0xB0);
+	st7586_write(ST_COMMAND, 0xB0);		// Duty Setting
 	st7586_write(ST_DATA, 0x9F);
-	st7586_write(ST_COMMAND, 0xB4);
+	st7586_write(ST_COMMAND, 0xB4);		// Partial Display
 	st7586_write(ST_DATA, 0xA0);
-	st7586_write(ST_COMMAND, 0x30);
+	st7586_write(ST_COMMAND, 0x30);		// Partial Display Area = COM0 ~ COM119
 	st7586_write(ST_DATA, 0x00);
 	st7586_write(ST_DATA, 0x00);
 	st7586_write(ST_DATA, 0x00);
 	st7586_write(ST_DATA, 0x77);
-	st7586_write(ST_COMMAND, 0x20);
-	st7586_write(ST_COMMAND, 0x2A);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x7F);
-	st7586_write(ST_COMMAND, 0x2B);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, 0x9F);
+	st7586_write(ST_COMMAND, 0x20);		// Display Inversion OFF
 
-	st7586_write(ST_COMMAND, 0x29);	// display on
+	st7586_write(ST_COMMAND, 0x2A);		// Column Address Setting
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x2A);		// 0~42(128px / 3)
+	st7586_write(ST_COMMAND, 0x2B);		// Row Address Setting
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, 0x9F);		// 0~159(160px)
+
+	// Clear whole DDRAM by "0"
+	st7586_write(ST_COMMAND, 0x2C);
+	for(i = 0; i < 160; i++){
+		for(j = 0; j < 43; j++){
+			st7586_write(ST_DATA, 0x00);
+		}
+	}
+
+	st7586_write(ST_COMMAND, 0x29);		// display on
 }
 
-int main(void)
-{
-	bsp_board_leds_init();
+void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2){
+	st7586_write(ST_COMMAND, 0x2A);		// Column Address Setting
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, x1);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, x2);
+	st7586_write(ST_COMMAND, 0x2B);		// Row Address Setting
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, y1);
+	st7586_write(ST_DATA, 0x00);
+	st7586_write(ST_DATA, y2);
 
+	st7586_write(ST_COMMAND, 0x2C);
+	for(i = 0; i < 160; i++){
+		for(j = 0; j < 128; j++){
+			st7586_write(ST_DATA, 0xFF);
+		}
+	}
+}
+
+int main(void){
+	bsp_board_leds_init();
 	APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
 	NRF_LOG_DEFAULT_BACKENDS_INIT();
     
-	st7586_pinout_setup();
-	Initialization_ST7586S();
-	//NRF_LOG_INFO("SPI example.");
+	pinout_setup_st7586();
+	init_st7586();
 
-    // st7586_write(ST_COMMAND, data) -> When A0 is a command, it calls a function that performs SPI communication
-    // st7586_write(ST_DATA, data) -> When A0 is a Data, it calls a function that performs SPI communication
-
-    /* Toggle LEDs. */
-    while (true)
-    {
-        for (int i = 0; i < LEDS_NUMBER; i++)
-        {
-            bsp_board_led_invert(0);
-            nrf_delay_ms(500);
-        }
-    }
-
-/*
-    while (1)
-    {
-        // Reset rx buffer and transfer done flag
-
-
-        while (1) {
-        	__WFE();
-        }
-
-        NRF_LOG_FLUSH();
-
-        bsp_board_led_invert(BSP_BOARD_LED_0);
-        nrf_delay_ms(200);
-    }
-*/
+	draw_rectangle(0x0A, 0x30, 0x28, 0x40);
 }
