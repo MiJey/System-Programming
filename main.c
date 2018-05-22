@@ -12,14 +12,8 @@ int main(void)
 
 	// Enter main loop.
 	while(1) {
-bsp_board_led_invert(0);
-nrf_delay_ms(500);
 		if (NRF_LOG_PROCESS() == false) {
-bsp_board_led_invert(3);
-nrf_delay_ms(500);
 			power_manage();
-bsp_board_led_invert(3);
-nrf_delay_ms(500);
 		}
 	}
 }

@@ -1,11 +1,11 @@
 #include "come_on.h"
 
-#define ADVERTISING_LED                 BSP_BOARD_LED_0
+#define ADVERTISING_LED                 BSP_BOARD_LED_3
 #define CONNECTED_LED                   BSP_BOARD_LED_1
 #define LEDBUTTON_LED                   BSP_BOARD_LED_2
-//#define P2BUTTON0_LED                   BSP_BOARD_LED_0
-//#define P2BUTTON1_LED                   BSP_BOARD_LED_1
-//#define P2BUTTON2_LED                   BSP_BOARD_LED_2
+#define P2BUTTON0_LED                   BSP_BOARD_LED_0
+#define P2BUTTON1_LED                   BSP_BOARD_LED_1
+#define P2BUTTON2_LED                   BSP_BOARD_LED_2
 #define P2BUTTON3_LED                   BSP_BOARD_LED_3
 
 #define LEDBUTTON_BUTTON                BSP_BUTTON_0
@@ -98,7 +98,7 @@ static void advertising_start(void) {
 
 	err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
 	APP_ERROR_CHECK(err_code);
-	bsp_board_led_on(ADVERTISING_LED);
+//	bsp_board_led_on(ADVERTISING_LED);
 }
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context) {
 	ret_code_t err_code;
@@ -106,8 +106,8 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context) {
 	switch (p_ble_evt->header.evt_id) {
 	case BLE_GAP_EVT_CONNECTED:
 		NRF_LOG_INFO("Connected");
-		bsp_board_led_on(CONNECTED_LED);
-		bsp_board_led_off(ADVERTISING_LED);
+//		bsp_board_led_on(CONNECTED_LED);
+//		bsp_board_led_off(ADVERTISING_LED);
 		m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
 
 		err_code = app_button_enable();
@@ -116,7 +116,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context) {
 
 	case BLE_GAP_EVT_DISCONNECTED:
 		NRF_LOG_INFO("Disconnected");
-		bsp_board_led_off(CONNECTED_LED);
+//		bsp_board_led_off(CONNECTED_LED);
 		m_conn_handle = BLE_CONN_HANDLE_INVALID;
 		err_code = app_button_disable();
 		APP_ERROR_CHECK(err_code);
@@ -230,11 +230,18 @@ static void gatt_init(void) {
 }
 
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
+	switch (led_state) {
+	case 0: bsp_board_led_invert(P2BUTTON0_LED); break;
+	case 1: bsp_board_led_invert(P2BUTTON1_LED); break;
+	case 2: bsp_board_led_invert(P2BUTTON2_LED); break;
+	case 3: bsp_board_led_invert(P2BUTTON3_LED); break;
+	default: break;
+	}/*
 	if (led_state) { 
 		bsp_board_led_on(LEDBUTTON_LED);
 	} else {
 		bsp_board_led_off(LEDBUTTON_LED);
-	}
+	}*/
 }
 static void services_init(void) {
 	ret_code_t     err_code;
