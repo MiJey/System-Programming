@@ -20,7 +20,7 @@ static void spi_event_handler(nrf_drv_spi_evt_t const *p_event, void *p_context)
 	st7586_spi_xfer_done = true;
 }
 
-void st7586_write(const uint8_t category, const uint8_t data) {
+static void st7586_write(const uint8_t category, const uint8_t data) {
 	int err_code;
 	nrf_gpio_pin_write(RATIO_SPI0_LCD_A0, category);
 

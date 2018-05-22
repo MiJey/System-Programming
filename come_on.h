@@ -31,13 +31,12 @@
 #include "ble_lbs.h"
 #include "nrf_ble_gatt.h"
 
-#include "nrf_soc.h"
-#include "nrf_nvic.h"
-
 /**************************************************/
-
-void blinky_come_on();
 
 // spi
 void lcd_init();
 void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
+
+// ble
+void ble_start();
+void power_manage();
