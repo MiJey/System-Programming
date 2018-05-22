@@ -1,14 +1,12 @@
 _build/nrf52832_xxaa/nrf_assert.c.o: \
  ../../../components/libraries/util/nrf_assert.c \
  ../../../components/libraries/util/nrf_assert.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdint.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_default_types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/features.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_newlib_version.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_intsup.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_stdint.h \
- ../../../components/device/nrf.h ../../../components/device/nrf52.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdint.h \
+ /usr/include/newlib/stdint.h \
+ /usr/include/newlib/machine/_default_types.h \
+ /usr/include/newlib/sys/features.h /usr/include/newlib/sys/_intsup.h \
+ /usr/include/newlib/sys/_stdint.h ../../../components/device/nrf.h \
+ ../../../components/device/nrf52.h \
  ../../../components/toolchain/cmsis/include/core_cm4.h \
  ../../../components/toolchain/cmsis/include/core_cmInstr.h \
  ../../../components/toolchain/cmsis/include/cmsis_gcc.h \
@@ -20,45 +18,35 @@ _build/nrf52832_xxaa/nrf_assert.c.o: \
  ../../../components/device/nrf52_name_change.h \
  ../../../components/device/compiler_abstraction.h \
  ../../../components/libraries/util/app_error.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdio.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_ansi.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/newlib.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/config.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/ieeefp.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/cdefs.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdarg.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/reent.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_ansi.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/lock.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_pthreadtypes.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/stdio.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdbool.h \
+ /usr/include/newlib/stdio.h /usr/include/newlib/_ansi.h \
+ /usr/include/newlib/newlib.h /usr/include/newlib/sys/config.h \
+ /usr/include/newlib/machine/ieeefp.h /usr/include/newlib/sys/cdefs.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stddef.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdarg.h \
+ /usr/include/newlib/sys/reent.h /usr/include/newlib/_ansi.h \
+ /usr/include/newlib/sys/_types.h /usr/include/newlib/machine/_types.h \
+ /usr/include/newlib/sys/lock.h /usr/include/newlib/sys/types.h \
+ /usr/include/newlib/machine/types.h /usr/include/newlib/sys/stdio.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h \
  ../../../components/libraries/util/sdk_errors.h \
- ../../../components/drivers_nrf/nrf_soc_nosd/nrf_error.h \
+ ../../../components/softdevice/s132/headers/nrf_error.h \
  ../config/sdk_config.h \
  ../../../components/libraries/util/nordic_common.h \
  ../../../components/libraries/util/app_error_weak.h
 
 ../../../components/libraries/util/nrf_assert.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stdint.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdint.h:
+/usr/include/newlib/stdint.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_default_types.h:
+/usr/include/newlib/machine/_default_types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/features.h:
+/usr/include/newlib/sys/features.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_newlib_version.h:
+/usr/include/newlib/sys/_intsup.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_intsup.h:
-
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_stdint.h:
+/usr/include/newlib/sys/_stdint.h:
 
 ../../../components/device/nrf.h:
 
@@ -86,45 +74,43 @@ _build/nrf52832_xxaa/nrf_assert.c.o: \
 
 ../../../components/libraries/util/app_error.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdio.h:
+/usr/include/newlib/stdio.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_ansi.h:
+/usr/include/newlib/_ansi.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/newlib.h:
+/usr/include/newlib/newlib.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/config.h:
+/usr/include/newlib/sys/config.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/ieeefp.h:
+/usr/include/newlib/machine/ieeefp.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/cdefs.h:
+/usr/include/newlib/sys/cdefs.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stddef.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdarg.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stdarg.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/reent.h:
+/usr/include/newlib/sys/reent.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_ansi.h:
+/usr/include/newlib/_ansi.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_types.h:
+/usr/include/newlib/sys/_types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_types.h:
+/usr/include/newlib/machine/_types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/lock.h:
+/usr/include/newlib/sys/lock.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/types.h:
+/usr/include/newlib/sys/types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_pthreadtypes.h:
+/usr/include/newlib/machine/types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/types.h:
+/usr/include/newlib/sys/stdio.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/stdio.h:
-
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdbool.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h:
 
 ../../../components/libraries/util/sdk_errors.h:
 
-../../../components/drivers_nrf/nrf_soc_nosd/nrf_error.h:
+../../../components/softdevice/s132/headers/nrf_error.h:
 
 ../config/sdk_config.h:
 

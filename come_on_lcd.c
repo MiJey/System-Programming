@@ -33,7 +33,7 @@ void st7586_write(const uint8_t category, const uint8_t data) {
 	nrf_delay_us(10);
 }
 
-void st7586_init() {
+void lcd_init() {
 	// spi setup
 	int err_code;
 	nrf_drv_spi_config_t spi_config = NRF_DRV_SPI_DEFAULT_CONFIG;

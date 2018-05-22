@@ -1,13 +1,11 @@
 _build/nrf52832_xxaa/system_nrf52.c.o: \
  ../../../components/toolchain/system_nrf52.c \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdint.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_default_types.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/features.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_newlib_version.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_intsup.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_stdint.h \
- /home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdbool.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdint.h \
+ /usr/include/newlib/stdint.h \
+ /usr/include/newlib/machine/_default_types.h \
+ /usr/include/newlib/sys/features.h /usr/include/newlib/sys/_intsup.h \
+ /usr/include/newlib/sys/_stdint.h \
+ /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h \
  ../../../components/device/nrf.h ../../../components/device/nrf52.h \
  ../../../components/toolchain/cmsis/include/core_cm4.h \
  ../../../components/toolchain/cmsis/include/core_cmInstr.h \
@@ -21,21 +19,19 @@ _build/nrf52832_xxaa/system_nrf52.c.o: \
  ../../../components/device/compiler_abstraction.h \
  ../../../components/toolchain/system_nrf52.h
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stdint.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/stdint.h:
+/usr/include/newlib/stdint.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/machine/_default_types.h:
+/usr/include/newlib/machine/_default_types.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/features.h:
+/usr/include/newlib/sys/features.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/_newlib_version.h:
+/usr/include/newlib/sys/_intsup.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_intsup.h:
+/usr/include/newlib/sys/_stdint.h:
 
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/arm-none-eabi/include/sys/_stdint.h:
-
-/home/mijey/gcc-arm-none-eabi-7-2017-q4-major/lib/gcc/arm-none-eabi/7.2.1/include/stdbool.h:
+/usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h:
 
 ../../../components/device/nrf.h:
 
