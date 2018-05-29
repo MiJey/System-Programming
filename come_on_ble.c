@@ -1,20 +1,24 @@
 #include "come_on.h"
 
-#define ADVERTISING_LED                 BSP_BOARD_LED_3
-#define CONNECTED_LED                   BSP_BOARD_LED_1
-#define LEDBUTTON_LED                   BSP_BOARD_LED_2
+//#define ADVERTISING_LED                 BSP_BOARD_LED_3
+//#define CONNECTED_LED                   BSP_BOARD_LED_1
+//#define LEDBUTTON_LED                   BSP_BOARD_LED_2
+
 #define P2BUTTON0_LED                   BSP_BOARD_LED_0
 #define P2BUTTON1_LED                   BSP_BOARD_LED_1
 #define P2BUTTON2_LED                   BSP_BOARD_LED_2
 #define P2BUTTON3_LED                   BSP_BOARD_LED_3
 
 #define LEDBUTTON_BUTTON                BSP_BUTTON_0
-#define P1_FN_BUTTON                    BSP_BUTTON_1
-#define P1_UP_BUTTON                    BSP_BUTTON_2
-#define P1_LEFT_BUTTON                  BSP_BUTTON_3
+
+//#define P1_FN_BUTTON                    BSP_BUTTON_0
+#define P1_UP_BUTTON                    BSP_BUTTON_1
+#define P1_LEFT_BUTTON                  BSP_BUTTON_2
+#define P1_RIGHT_BUTTON                 BSP_BUTTON_3
 
 #define DEVICE_NAME                     "Come on!"
 
+// ble 관련
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2	// Reply when unsupported features are requested.
 #define APP_BLE_OBSERVER_PRIO           3
 #define APP_BLE_CONN_CFG_TAG            1
@@ -55,12 +59,11 @@ static void log_init(void) {
 }
 
 static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
-	ret_code_t err_code;
-
+	// pin_no: 26, 27, 28, 29
 	switch (pin_no) {
 	case LEDBUTTON_BUTTON:
 		NRF_LOG_INFO("Send button state change.");
-		err_code = ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action);
+		ret_code_t err_code = ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 26, 27
 		if (err_code != NRF_SUCCESS
 		 && err_code != BLE_ERROR_INVALID_CONN_HANDLE
 		 && err_code != NRF_ERROR_INVALID_STATE
@@ -68,16 +71,28 @@ static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
                 	APP_ERROR_CHECK(err_code);
 		}
 		break;
-//	case P1_FN_BUTTON: break;
-//	case P1_UP_BUTTON: break;
-//	case P1_LEFT_BUTTON: break;
-//	case P1_RIGHT_BUTTON: break;
+	//case P1_FN_BUTTON:
+		// ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 26, 27
+		//break;
+	case P1_UP_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 28, 29
+		break;
+	case P1_LEFT_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 30, 31
+		break;
+	case P1_RIGHT_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 32, 33
+		break;
 	default: APP_ERROR_HANDLER(pin_no); break;
 	}
 }
 static void buttons_init(void) {
 	//The array must be static because a pointer to it will be saved in the button handler module.
-	static app_button_cfg_t buttons[] = {{LEDBUTTON_BUTTON, false, BUTTON_PULL, button_event_handler}};
+	static app_button_cfg_t buttons[] = {
+		{LEDBUTTON_BUTTON, false, BUTTON_PULL, button_event_handler},
+		{P1_UP_BUTTON, false, BUTTON_PULL, button_event_handler},
+		{P1_LEFT_BUTTON, false, BUTTON_PULL, button_event_handler},
+		{P1_RIGHT_BUTTON, false, BUTTON_PULL, button_event_handler}};
 	ret_code_t err_code = app_button_init(buttons, sizeof(buttons) / sizeof(buttons[0]), BUTTON_DETECTION_DELAY);
 	APP_ERROR_CHECK(err_code);
 }
@@ -100,7 +115,7 @@ static void advertising_start(void) {
 	APP_ERROR_CHECK(err_code);
 //	bsp_board_led_on(ADVERTISING_LED);
 }
-static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context) {
+static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 	ret_code_t err_code;
 
 	switch (p_ble_evt->header.evt_id) {
