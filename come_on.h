@@ -35,8 +35,16 @@
 
 // spi
 void lcd_init();
+void st7586_write(const uint8_t category, const uint8_t data);
+
+// draw
 void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
+void draw_walk_a(uint8_t x, uint8_t y);
+void draw_walk_b(uint8_t x, uint8_t y);
 
 // ble
 void ble_start();
 void power_manage();
+
+// game
+void come_on_button_right(uint8_t button_action);

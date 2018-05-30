@@ -20,7 +20,7 @@ static void spi_event_handler(nrf_drv_spi_evt_t const *p_event, void *p_context)
 	st7586_spi_xfer_done = true;
 }
 
-static void st7586_write(const uint8_t category, const uint8_t data) {
+void st7586_write(const uint8_t category, const uint8_t data) {
 	int err_code;
 	nrf_gpio_pin_write(RATIO_SPI0_LCD_A0, category);
 
@@ -121,24 +121,4 @@ void lcd_init() {
 	}
 
 	st7586_write(ST_COMMAND, 0x29);		// display on
-}
-
-void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
-	st7586_write(ST_COMMAND, 0x2A);		// Column Address Setting
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, x1);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, x2);
-	st7586_write(ST_COMMAND, 0x2B);		// Row Address Setting
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, y1);
-	st7586_write(ST_DATA, 0x00);
-	st7586_write(ST_DATA, y2);
-
-	st7586_write(ST_COMMAND, 0x2C);
-	for(i = 0; i < 160; i++){
-		for(j = 0; j < 128; j++){
-			st7586_write(ST_DATA, 0xFF);
-		}
-	}
 }

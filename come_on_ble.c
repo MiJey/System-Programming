@@ -9,9 +9,7 @@
 #define P2BUTTON2_LED                   BSP_BOARD_LED_2
 #define P2BUTTON3_LED                   BSP_BOARD_LED_3
 
-#define LEDBUTTON_BUTTON                BSP_BUTTON_0
-
-//#define P1_FN_BUTTON                    BSP_BUTTON_0
+#define P1_FN_BUTTON                    BSP_BUTTON_0
 #define P1_UP_BUTTON                    BSP_BUTTON_1
 #define P1_LEFT_BUTTON                  BSP_BUTTON_2
 #define P1_RIGHT_BUTTON                 BSP_BUTTON_3
@@ -60,8 +58,9 @@ static void log_init(void) {
 
 static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
 	// pin_no: 26, 27, 28, 29
+	// button_action: 0(released), 1(pressed)
 	switch (pin_no) {
-	case LEDBUTTON_BUTTON:
+	case P1_FN_BUTTON:
 		NRF_LOG_INFO("Send button state change.");
 		ret_code_t err_code = ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 26, 27
 		if (err_code != NRF_SUCCESS
@@ -71,9 +70,6 @@ static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
                 	APP_ERROR_CHECK(err_code);
 		}
 		break;
-	//case P1_FN_BUTTON:
-		// ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 26, 27
-		//break;
 	case P1_UP_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 28, 29
 		break;
@@ -89,7 +85,7 @@ static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
 static void buttons_init(void) {
 	//The array must be static because a pointer to it will be saved in the button handler module.
 	static app_button_cfg_t buttons[] = {
-		{LEDBUTTON_BUTTON, false, BUTTON_PULL, button_event_handler},
+		{P1_FN_BUTTON, false, BUTTON_PULL, button_event_handler},
 		{P1_UP_BUTTON, false, BUTTON_PULL, button_event_handler},
 		{P1_LEFT_BUTTON, false, BUTTON_PULL, button_event_handler},
 		{P1_RIGHT_BUTTON, false, BUTTON_PULL, button_event_handler}};
