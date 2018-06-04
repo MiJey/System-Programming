@@ -5,6 +5,12 @@
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
 
+#include "app_scheduler.h"
+#include "nordic_common.h"
+
+// Scheduler settings
+#define SCHED_MAX_EVENT_DATA_SIZE       sizeof(nrf_drv_gpiote_pin_t)
+#define SCHED_QUEUE_SIZE                10
 
 // Pins for LED's and buttons.
 // The diodes on the DK are connected with the cathodes to the GPIO pin, so
@@ -74,6 +80,13 @@ void button_handler(nrf_drv_gpiote_pin_t pin)
     }
 }
 
+// Button handler function to be called by the scheduler.
+void button_scheduler_event_handler(void *p_event_data, uint16_t event_size)
+{
+    // In this case, p_event_data is a pointer to a nrf_drv_gpiote_pin_t that represents
+    // the pin number of the button pressed. The size is constant, so it is ignored.
+    button_handler(*((nrf_drv_gpiote_pin_t*)p_event_data));
+}
 
 // Button event handler.
 void gpiote_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
@@ -81,7 +94,8 @@ void gpiote_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
     // The button_handler function could be implemented here directly, but is
     // extracted to a separate function as it makes it easier to demonstrate
     // the scheduler with less modifications to the code later in the tutorial.
-    button_handler(pin);
+    // button_handler(pin);
+    app_sched_event_put(&pin, sizeof(pin), button_scheduler_event_handler);
 }
 
 
@@ -182,9 +196,11 @@ int main(void)
     // Create application timer instances.
     create_timers();
 
+	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
     // Main loop.
     while (true)
     {
+    	app_sched_execute();
         // Wait for interrupt.
         __WFI();
     }

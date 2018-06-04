@@ -53,7 +53,8 @@ _build/nrf52832_xxaa/main.c.o: ../../main.c \
  /usr/include/newlib/string.h /usr/include/newlib/sys/string.h \
  ../../../components/libraries/util/sdk_os.h \
  ../../../components/libraries/util/app_util.h \
- ../../../components/libraries/util/sdk_macros.h
+ ../../../components/libraries/util/sdk_macros.h \
+ ../../../components/libraries/scheduler/app_scheduler.h
 
 /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h:
 
@@ -186,3 +187,5 @@ _build/nrf52832_xxaa/main.c.o: ../../main.c \
 ../../../components/libraries/util/app_util.h:
 
 ../../../components/libraries/util/sdk_macros.h:
+
+../../../components/libraries/scheduler/app_scheduler.h:
