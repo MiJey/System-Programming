@@ -31,6 +31,11 @@
 #include "ble_lbs.h"
 #include "nrf_ble_gatt.h"
 
+// scheduler
+#include "nrf_drv_gpiote.h"
+#include "nrf_drv_clock.h"
+#include "app_scheduler.h"
+
 /**************************************************/
 
 // spi
@@ -45,6 +50,9 @@ void draw_walk_b(uint8_t x, uint8_t y);
 // ble
 void ble_start();
 void power_manage();
+
+// scheduler
+void scheduler_test();
 
 // game
 void come_on_button_right(uint8_t button_action);

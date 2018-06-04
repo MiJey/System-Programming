@@ -1,5 +1,5 @@
-_build/nrf52832_xxaa/main.c.o: ../../main.c ../../come_on.h \
- /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h \
+_build/nrf52832_xxaa/come_on_scheduler.c.o: ../../come_on_scheduler.c \
+ ../../come_on.h /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdbool.h \
  /usr/lib/gcc/arm-none-eabi/4.9.3/include/stdint.h \
  /usr/include/newlib/stdint.h \
  /usr/include/newlib/machine/_default_types.h \

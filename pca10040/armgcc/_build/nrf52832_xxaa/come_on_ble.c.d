@@ -96,7 +96,13 @@ _build/nrf52832_xxaa/come_on_ble.c.o: ../../come_on_ble.c ../../come_on.h \
  ../../../components/libraries/timer/app_timer.h \
  ../../../components/libraries/button/app_button.h \
  ../../../components/ble/ble_services/ble_lbs/ble_lbs.h \
- ../../../components/ble/nrf_ble_gatt/nrf_ble_gatt.h
+ ../../../components/ble/nrf_ble_gatt/nrf_ble_gatt.h \
+ ../../../components/drivers_nrf/gpiote/nrf_drv_gpiote.h \
+ ../../../components/drivers_nrf/hal/nrf_gpiote.h \
+ ../../../components/drivers_nrf/clock/nrf_drv_clock.h \
+ ../../../components/drivers_nrf/hal/nrf_clock.h \
+ ../../../components/drivers_nrf/common/nrf_drv_common.h \
+ ../../../components/libraries/scheduler/app_scheduler.h
 
 ../../come_on.h:
 
@@ -315,3 +321,15 @@ _build/nrf52832_xxaa/come_on_ble.c.o: ../../come_on_ble.c ../../come_on.h \
 ../../../components/ble/ble_services/ble_lbs/ble_lbs.h:
 
 ../../../components/ble/nrf_ble_gatt/nrf_ble_gatt.h:
+
+../../../components/drivers_nrf/gpiote/nrf_drv_gpiote.h:
+
+../../../components/drivers_nrf/hal/nrf_gpiote.h:
+
+../../../components/drivers_nrf/clock/nrf_drv_clock.h:
+
+../../../components/drivers_nrf/hal/nrf_clock.h:
+
+../../../components/drivers_nrf/common/nrf_drv_common.h:
+
+../../../components/libraries/scheduler/app_scheduler.h:
