@@ -1,21 +1,192 @@
-#include "come_on.h"
+#include <stdbool.h>
+#include "boards.h"
+#include "nrf_drv_gpiote.h"
+#include "app_error.h"
+#include "app_timer.h"
+#include "nrf_drv_clock.h"
 
+
+// Pins for LED's and buttons.
+// The diodes on the DK are connected with the cathodes to the GPIO pin, so
+// clearing a pin will light the LED and setting the pin will turn of the LED.
+#define LED_1_PIN                       BSP_LED_0     // LED 1 on the nRF51-DK or nRF52-DK
+#define LED_2_PIN                       BSP_LED_1     // LED 3 on the nRF51-DK or nRF52-DK
+#define LED_3_PIN                       BSP_LED_2     // LED 3 on the nRF51-DK or nRF52-DK
+#define BUTTON_1_PIN                    BSP_BUTTON_0  // Button 1 on the nRF51-DK or nRF52-DK
+#define BUTTON_2_PIN                    BSP_BUTTON_1  // Button 2 on the nRF51-DK or nRF52-DK
+
+// General application timer settings.
+//#define APP_TIMER_PRESCALER             16    // Value of the RTC1 PRESCALER register.
+//#define APP_TIMER_OP_QUEUE_SIZE         2     // Size of timer operation queues.
+
+// Application timer ID.
+APP_TIMER_DEF(m_led_a_timer_id);
+
+
+// Function returns true if called from main context (CPU in thread
+// mode), and returns false if called from an interrupt context. This
+// is used to show what the scheduler is using, but has little use in
+// a real application.
+bool main_context ( void )
+{
+    static const uint8_t ISR_NUMBER_THREAD_MODE = 0;
+    uint8_t isr_number =__get_IPSR();
+    if ((isr_number ) == ISR_NUMBER_THREAD_MODE)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+// Function for controlling LED's based on button presses.
+void button_handler(nrf_drv_gpiote_pin_t pin)
+{
+    uint32_t err_code;
+
+    // Handle button presses.
+    switch (pin)
+    {
+    case BUTTON_1_PIN:
+        err_code = app_timer_start(m_led_a_timer_id, APP_TIMER_TICKS(200), NULL);
+        APP_ERROR_CHECK(err_code);
+        break;
+    case BUTTON_2_PIN:
+        err_code = app_timer_stop(m_led_a_timer_id);
+        APP_ERROR_CHECK(err_code);
+        break;
+    default:
+        break;
+    }
+
+    // Light LED 2 if running in main context and turn it off if running in an interrupt context.
+    // This has no practical use in a real application, but it is useful here in the tutorial.
+    if (main_context())
+    {
+        nrf_drv_gpiote_out_clear(LED_2_PIN);
+    }
+    else
+    {
+        nrf_drv_gpiote_out_set(LED_2_PIN);
+    }
+}
+
+
+// Button event handler.
+void gpiote_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
+{
+    // The button_handler function could be implemented here directly, but is
+    // extracted to a separate function as it makes it easier to demonstrate
+    // the scheduler with less modifications to the code later in the tutorial.
+    button_handler(pin);
+}
+
+
+// Function for configuring GPIO.
+static void gpio_config()
+{
+    ret_code_t err_code;
+
+    // Initialze driver.
+    err_code = nrf_drv_gpiote_init();
+    APP_ERROR_CHECK(err_code);
+
+    // Configure 3 output pins for LED's.
+    nrf_drv_gpiote_out_config_t out_config = GPIOTE_CONFIG_OUT_SIMPLE(false);
+    err_code = nrf_drv_gpiote_out_init(LED_1_PIN, &out_config);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_drv_gpiote_out_init(LED_2_PIN, &out_config);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_drv_gpiote_out_init(LED_3_PIN, &out_config);
+    APP_ERROR_CHECK(err_code);
+
+    // Set output pins (this will turn off the LED's).
+    nrf_drv_gpiote_out_set(LED_1_PIN);
+    nrf_drv_gpiote_out_set(LED_2_PIN);
+    nrf_drv_gpiote_out_set(LED_3_PIN);
+
+    // Make a configuration for input pints. This is suitable for both pins in this example.
+    nrf_drv_gpiote_in_config_t in_config = GPIOTE_CONFIG_IN_SENSE_HITOLO(true);
+    in_config.pull = NRF_GPIO_PIN_PULLUP;
+
+    // Configure input pins for buttons, with separate event handlers for each button.
+    err_code = nrf_drv_gpiote_in_init(BUTTON_1_PIN, &in_config, gpiote_event_handler);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_drv_gpiote_in_init(BUTTON_2_PIN, &in_config, gpiote_event_handler);
+    APP_ERROR_CHECK(err_code);
+
+    // Enable input pins for buttons.
+    nrf_drv_gpiote_in_event_enable(BUTTON_1_PIN, true);
+    nrf_drv_gpiote_in_event_enable(BUTTON_2_PIN, true);
+}
+
+
+// Timeout handler for the repeated timer
+static void timer_handler(void * p_context)
+{
+    // Toggle LED 1.
+    nrf_drv_gpiote_out_toggle(LED_1_PIN);
+
+    // Light LED 3 if running in main context and turn it off if running in an interrupt context.
+    // This has no practical use in a real application, but it is useful here in the tutorial.
+    if (main_context())
+    {
+        nrf_drv_gpiote_out_clear(LED_3_PIN);
+    }
+    else
+    {
+        nrf_drv_gpiote_out_set(LED_3_PIN);
+    }
+}
+
+
+// Create timers
+static void create_timers()
+{
+    uint32_t err_code;
+
+    // Create timers
+    err_code = app_timer_create(&m_led_a_timer_id,
+                                APP_TIMER_MODE_REPEATED,
+                                timer_handler);
+    APP_ERROR_CHECK(err_code);
+}
+
+
+// Function starting the internal LFCLK oscillator.
+// This is needed by RTC1 which is used by the Application Timer
+// (When SoftDevice is enabled the LFCLK is always running and this is not needed).
+static void lfclk_request(void)
+{
+    uint32_t err_code = nrf_drv_clock_init();
+    APP_ERROR_CHECK(err_code);
+    nrf_drv_clock_lfclk_request(NULL);
+}
+
+
+// Main function.
 int main(void)
 {
-	lcd_init();
-	ble_start();
+    // Request LF clock.
+    lfclk_request();
 
-	// lcd
-	draw_rectangle(0x0A, 0x30, 0x28, 0x40);
-	draw_rectangle(5, 80, 20, 125);
-	draw_walk_a(0, 0);
-	nrf_delay_ms(500);
-	draw_walk_b(0, 0);
-	
-	// Enter main loop.
-	while(1) {
-		if (NRF_LOG_PROCESS() == false) {
-			power_manage();
-		}
-	}
+    // Configure GPIO's.
+    gpio_config();
+
+    // Initialize the Application timer Library.
+    app_timer_init();
+
+    // Create application timer instances.
+    create_timers();
+
+    // Main loop.
+    while (true)
+    {
+        // Wait for interrupt.
+        __WFI();
+    }
 }
+
