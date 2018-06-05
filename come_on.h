@@ -49,11 +49,6 @@ void draw_walk_b(uint8_t x, uint8_t y);
 
 // ble
 void ble_start();
-//void power_manage();
-//void button_event_handler(uint8_t pin_no, uint8_t button_action);
-
-// scheduler
-void scheduler_init();
 
 // game
-void come_on_button_right(uint8_t button_action);
+void p1_move_right();

@@ -40,20 +40,6 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the curren
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(nrf_drv_gpiote_pin_t)
 #define SCHED_QUEUE_SIZE                10
 
-// General application timer settings.
-#define APP_TIMER_PRESCALER             16    // Value of the RTC1 PRESCALER register.
-#define APP_TIMER_OP_QUEUE_SIZE         2     // Size of timer operation queues.
-
-// Application timer ID.
-APP_TIMER_DEF(m_btn_a_timer_id);
-
-void move_right() {
-	draw_walk_a(0, 0);
-	nrf_delay_ms(500);
-	draw_walk_b(0, 0);
-	nrf_delay_ms(500);
-}
-
 static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
 	uint8_t pin = *((uint8_t*)p_event_data);
 	switch(pin) {
@@ -68,7 +54,7 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 		break;
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 33);	// 32, 33
-		move_right();
+		p1_move_right();
 		break;
 	}
 }
@@ -268,10 +254,14 @@ static void gatt_init(void) {
 
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
 	switch (led_state) {
-	case 0: bsp_board_led_invert(P2_FN_BTNLED); break;
-	case 1: bsp_board_led_invert(P2_UP_BTNLED); break;
-	case 2: bsp_board_led_invert(P2_LE_BTNLED); break;
-	case 3: bsp_board_led_invert(P2_RI_BTNLED); break;
+	case 0: bsp_board_led_off(P2_FN_BTNLED); break;
+	case 1: bsp_board_led_on(P2_FN_BTNLED); break;
+	case 2: bsp_board_led_off(P2_UP_BTNLED); break;
+	case 3: bsp_board_led_on(P2_UP_BTNLED); break;
+	case 4: bsp_board_led_off(P2_LE_BTNLED); break;
+	case 5: bsp_board_led_on(P2_LE_BTNLED); break;
+	case 6: bsp_board_led_off(P2_RI_BTNLED); break;
+	case 7: bsp_board_led_on(P2_RI_BTNLED); break;
 	default: break;
 	}/*
 	if (led_state) { 

@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -91,10 +92,51 @@ public class BlinkyActivity extends AppCompatActivity {
 		viewModel.isConnected().observe(this, connected -> { if (!connected) { finish(); } });
 
 		// 휴대폰(Player 2)에서 버튼 눌렀을 떄
-        p2_button0.setOnClickListener(view -> viewModel.pressP2button(0));
-        p2_button1.setOnClickListener(view -> viewModel.pressP2button(1));
-        p2_button2.setOnClickListener(view -> viewModel.pressP2button(2));
-        p2_button3.setOnClickListener(view -> viewModel.pressP2button(3));
+		p2_button0.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    viewModel.pressP2button(1); // Pressed
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    viewModel.pressP2button(0); // Released
+				}
+				return true;
+			}
+		});
+        p2_button1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    viewModel.pressP2button(3); // Pressed
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    viewModel.pressP2button(2); // Released
+                }
+                return true;
+            }
+        });
+        p2_button2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    viewModel.pressP2button(5); // Pressed
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    viewModel.pressP2button(4); // Released
+                }
+                return true;
+            }
+        });
+        p2_button3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    viewModel.pressP2button(7); // Pressed
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    viewModel.pressP2button(6); // Released
+                }
+                return true;
+            }
+        });
+        // p2_button3.setOnClickListener(view -> viewModel.pressP2button(3));
 
 		// 보드(Player 1)에서 버튼 눌렀을 때
         viewModel.getButtonState(0).observe(this, pressed ->
