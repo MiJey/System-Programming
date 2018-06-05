@@ -43,7 +43,6 @@ SRC_FILES += \
  $(SDK_ROOT)/components/libraries/bsp/bsp_nfc.c \
   $(PROJ_DIR)/main.c \
  $(PROJ_DIR)/come_on_spi.c \
- $(PROJ_DIR)/come_on_scheduler.c \
  $(PROJ_DIR)/come_on_ble.c \
  $(PROJ_DIR)/come_on_draw.c \
  $(PROJ_DIR)/come_on.c \

@@ -1,22 +1,19 @@
 #include "come_on.h"
 
-//#define ADVERTISING_LED                 BSP_BOARD_LED_3
-//#define CONNECTED_LED                   BSP_BOARD_LED_1
-//#define LEDBUTTON_LED                   BSP_BOARD_LED_2
-
-#define P2BUTTON0_LED                   BSP_BOARD_LED_0
-#define P2BUTTON1_LED                   BSP_BOARD_LED_1
-#define P2BUTTON2_LED                   BSP_BOARD_LED_2
-#define P2BUTTON3_LED                   BSP_BOARD_LED_3
+#define P2_FN_BTNLED                    BSP_BOARD_LED_0
+#define P2_UP_BTNLED                    BSP_BOARD_LED_1
+#define P2_LE_BTNLED                    BSP_BOARD_LED_2
+#define P2_RI_BTNLED                    BSP_BOARD_LED_3
 
 #define P1_FN_BUTTON                    BSP_BUTTON_0
 #define P1_UP_BUTTON                    BSP_BUTTON_1
-#define P1_LEFT_BUTTON                  BSP_BUTTON_2
-#define P1_RIGHT_BUTTON                 BSP_BUTTON_3
+#define P1_LE_BUTTON                    BSP_BUTTON_2
+#define P1_RI_BUTTON                    BSP_BUTTON_3
+
+/******************** BLE ********************/
 
 #define DEVICE_NAME                     "Come on!"
 
-// ble 관련
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2	// Reply when unsupported features are requested.
 #define APP_BLE_OBSERVER_PRIO           3
 #define APP_BLE_CONN_CFG_TAG            1
@@ -37,63 +34,90 @@ NRF_BLE_GATT_DEF(m_gatt);	// GATT module instance.
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the current connection.
 
-/**************************************************/
+/******************** 스케줄러 ********************/
 
-static void leds_init(void) {
-	bsp_board_leds_init();
+// Scheduler settings
+#define SCHED_MAX_EVENT_DATA_SIZE       sizeof(nrf_drv_gpiote_pin_t)
+#define SCHED_QUEUE_SIZE                10
+
+// General application timer settings.
+#define APP_TIMER_PRESCALER             16    // Value of the RTC1 PRESCALER register.
+#define APP_TIMER_OP_QUEUE_SIZE         2     // Size of timer operation queues.
+
+// Application timer ID.
+APP_TIMER_DEF(m_btn_a_timer_id);
+
+void move_right() {
+	draw_walk_a(0, 0);
+	nrf_delay_ms(500);
+	draw_walk_b(0, 0);
+	nrf_delay_ms(500);
 }
 
-static void timers_init(void) {
-	// Initialize timer module, making it use the scheduler
-	ret_code_t err_code = app_timer_init();
-	APP_ERROR_CHECK(err_code);
-}
-
-static void log_init(void) {
-	ret_code_t err_code = NRF_LOG_INIT(NULL);
-	APP_ERROR_CHECK(err_code);
-
-	NRF_LOG_DEFAULT_BACKENDS_INIT();
-}
-
-static void button_event_handler(uint8_t pin_no, uint8_t button_action) {
-	// pin_no: 26, 27, 28, 29
-	// button_action: 0(released), 1(pressed)
-	switch (pin_no) {
+static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
+	uint8_t pin = *((uint8_t*)p_event_data);
+	switch(pin) {
 	case P1_FN_BUTTON:
-		NRF_LOG_INFO("Send button state change.");
-		ret_code_t err_code = ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 26, 27
-		if (err_code != NRF_SUCCESS
-		 && err_code != BLE_ERROR_INVALID_CONN_HANDLE
-		 && err_code != NRF_ERROR_INVALID_STATE
-		 && err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING) {
-                	APP_ERROR_CHECK(err_code);
-		}
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 27);	// 26, 27
 		break;
 	case P1_UP_BUTTON:
-		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 28, 29
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 29);	// 28, 29
 		break;
-	case P1_LEFT_BUTTON:
-		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 30, 31
+	case P1_LE_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 31);	// 30, 31
 		break;
-	case P1_RIGHT_BUTTON:
-		ble_lbs_on_button_change(m_conn_handle, &m_lbs, button_action + pin_no * 2);	// 32, 33
+	case P1_RI_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 33);	// 32, 33
+		move_right();
 		break;
-	default: APP_ERROR_HANDLER(pin_no); break;
 	}
 }
+
+static void button_released_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
+	uint8_t pin = *((uint8_t*)p_event_data);
+	switch(pin) {
+	case P1_FN_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 26);	// 26, 27
+		break;
+	case P1_UP_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 28);	// 28, 29
+		break;
+	case P1_LE_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 30);	// 30, 31
+		break;
+	case P1_RI_BUTTON:
+		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 32);	// 32, 33
+		break;
+	}
+}
+
+static void button_event_handler(uint8_t pin, uint8_t button_action) {
+	if(button_action) {
+		app_sched_event_put(&pin, sizeof(pin), button_pressed_scheduler_event_handler);
+	} else {
+		app_sched_event_put(&pin, sizeof(pin), button_released_scheduler_event_handler);
+	}
+}
+
 static void buttons_init(void) {
 	//The array must be static because a pointer to it will be saved in the button handler module.
 	static app_button_cfg_t buttons[] = {
 		{P1_FN_BUTTON, false, BUTTON_PULL, button_event_handler},
 		{P1_UP_BUTTON, false, BUTTON_PULL, button_event_handler},
-		{P1_LEFT_BUTTON, false, BUTTON_PULL, button_event_handler},
-		{P1_RIGHT_BUTTON, false, BUTTON_PULL, button_event_handler}};
+		{P1_LE_BUTTON, false, BUTTON_PULL, button_event_handler},
+		{P1_RI_BUTTON, false, BUTTON_PULL, button_event_handler}};
 	ret_code_t err_code = app_button_init(buttons, sizeof(buttons) / sizeof(buttons[0]), BUTTON_DETECTION_DELAY);
 	APP_ERROR_CHECK(err_code);
 }
 
-// advertising
+/**************************************************/
+
+void log_init(void) {
+	ret_code_t err_code = NRF_LOG_INIT(NULL);
+	APP_ERROR_CHECK(err_code);
+	NRF_LOG_DEFAULT_BACKENDS_INIT();
+}
+
 static void advertising_start(void) {
 	ret_code_t           err_code;
 	ble_gap_adv_params_t adv_params;
@@ -111,7 +135,8 @@ static void advertising_start(void) {
 	APP_ERROR_CHECK(err_code);
 //	bsp_board_led_on(ADVERTISING_LED);
 }
-static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
+
+void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 	ret_code_t err_code;
 
 	switch (p_ble_evt->header.evt_id) {
@@ -199,6 +224,7 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 	default: break;
 	}
 }
+
 static void ble_stack_init(void) {
 	ret_code_t err_code = nrf_sdh_enable_request();
 	APP_ERROR_CHECK(err_code);
@@ -242,10 +268,10 @@ static void gatt_init(void) {
 
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
 	switch (led_state) {
-	case 0: bsp_board_led_invert(P2BUTTON0_LED); break;
-	case 1: bsp_board_led_invert(P2BUTTON1_LED); break;
-	case 2: bsp_board_led_invert(P2BUTTON2_LED); break;
-	case 3: bsp_board_led_invert(P2BUTTON3_LED); break;
+	case 0: bsp_board_led_invert(P2_FN_BTNLED); break;
+	case 1: bsp_board_led_invert(P2_UP_BTNLED); break;
+	case 2: bsp_board_led_invert(P2_LE_BTNLED); break;
+	case 3: bsp_board_led_invert(P2_RI_BTNLED); break;
 	default: break;
 	}/*
 	if (led_state) { 
@@ -254,6 +280,7 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
 		bsp_board_led_off(LEDBUTTON_LED);
 	}*/
 }
+
 static void services_init(void) {
 	ret_code_t     err_code;
 	ble_lbs_init_t init;
@@ -316,16 +343,16 @@ static void conn_params_init(void) {
 
 /**************************************************/
 
-void power_manage(void) {
-    ret_code_t err_code = sd_app_evt_wait();
-    APP_ERROR_CHECK(err_code);
-}
-
 void ble_start() {
-	leds_init();
-	timers_init();
+	bsp_board_leds_init();	// leds_init
 	log_init();
+	
+	// scheduler
+	app_timer_init();
 	buttons_init();
+	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+	
+	// ble
 	ble_stack_init();
 	gap_params_init();
 	gatt_init();
