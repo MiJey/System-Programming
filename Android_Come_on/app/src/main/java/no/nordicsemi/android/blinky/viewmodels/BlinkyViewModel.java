@@ -122,6 +122,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
 	// 휴대폰(Player 2)에서 버튼 눌렀을 떄 send
 	public void pressP2button(final int p2button) {
+		Log.d("buttonTest", "button: " + p2button);
 		mBlinkyManager.send(p2button);
 	}
 

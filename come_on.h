@@ -46,9 +46,16 @@ void st7586_write(const uint8_t category, const uint8_t data);
 void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void draw_walk_a(uint8_t x, uint8_t y);
 void draw_walk_b(uint8_t x, uint8_t y);
+void draw_hp(uint8_t pl, uint8_t hp);
+void draw_circle(uint8_t x1, uint8_t wl);
+void draw_ready();
+void draw_go();
+void draw_splash();
+void draw_clear();
 
 // ble
 void ble_start();
 
 // game
 void p1_move_right();
+void game_ready();

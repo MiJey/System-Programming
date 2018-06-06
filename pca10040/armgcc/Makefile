@@ -45,7 +45,7 @@ SRC_FILES += \
  $(PROJ_DIR)/come_on_spi.c \
  $(PROJ_DIR)/come_on_ble.c \
  $(PROJ_DIR)/come_on_draw.c \
- $(PROJ_DIR)/come_on.c \
+ $(PROJ_DIR)/come_on_game.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \

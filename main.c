@@ -3,7 +3,12 @@
 int main(void)
 {
 	lcd_init();
+
+	draw_splash();
+	nrf_delay_ms(1000);
 	ble_start();
+
+	
 
 	// Enter main loop.
 	while(1) {

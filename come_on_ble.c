@@ -253,6 +253,7 @@ static void gatt_init(void) {
 }
 
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
+	// TODO led 켜고 끄는 딜레이는 줄일 수 없는건지
 	switch (led_state) {
 	case 0: bsp_board_led_off(P2_FN_BTNLED); break;
 	case 1: bsp_board_led_on(P2_FN_BTNLED); break;
@@ -263,12 +264,7 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
 	case 6: bsp_board_led_off(P2_RI_BTNLED); break;
 	case 7: bsp_board_led_on(P2_RI_BTNLED); break;
 	default: break;
-	}/*
-	if (led_state) { 
-		bsp_board_led_on(LEDBUTTON_LED);
-	} else {
-		bsp_board_led_off(LEDBUTTON_LED);
-	}*/
+	}
 }
 
 static void services_init(void) {
@@ -351,4 +347,5 @@ void ble_start() {
 	conn_params_init();
 
 	advertising_start();
+	game_ready();
 }
