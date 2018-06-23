@@ -13,7 +13,7 @@ int main(){
 	
 	for(i = 0; i < h; i++){
 		for(j = 0; j < w; j++){
-			scanf("%d", &n);
+			scanf("%3d", &n);
 			switch(n){
 			case 0: arr.push_back(0); break;
 			case 1: arr.push_back(3); break;
