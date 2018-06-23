@@ -1,7 +1,6 @@
 #include "come_on.h"
 
-int main(void)
-{
+int main() {
 	lcd_init();
 
 	draw_splash();

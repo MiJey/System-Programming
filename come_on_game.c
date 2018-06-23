@@ -1,19 +1,25 @@
 #include "come_on.h"
 
 int x = 0;
+bool walk = true;
+
 void p1_move_right() {
+	draw_clear(x, 39, x + 18, 0);
 	x += 5;
-	draw_clear();
-	draw_walk_a(x, 39);
-	nrf_delay_ms(100);
-	x += 5;
-	draw_clear();
-	draw_jump(x, 0);
-	nrf_delay_ms(100);
+	if(x > 128) { x = 0; }
+	
+	if(walk) {
+		draw_walk_a(x, 39);
+	} else {
+		draw_walk_b(x, 39);
+	}
+	
+	walk = !walk;
+	
 }
 
 void game_ready() {
-	draw_clear();
+	draw_clear(0, 159, 127, 0);
 
 	draw_hp(1, 48);
 	draw_hp(2, 48);

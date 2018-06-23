@@ -52,7 +52,7 @@ void draw_circle(uint8_t x1, uint8_t wl);
 void draw_ready();
 void draw_go();
 void draw_splash();
-void draw_clear();
+void draw_clear(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void draw_time(uint8_t time);
 
 // ble
@@ -61,3 +61,4 @@ void ble_start();
 // game
 void p1_move_right();
 void game_ready();
+void next_time();
