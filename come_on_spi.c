@@ -1,15 +1,15 @@
 #include "come_on.h"
 
-#define ST7586_SPI_INSTANCE	0
+#define ST7586_SPI_INSTANCE     0
 
-#define ST_COMMAND			0
-#define ST_DATA				1
+#define ST_COMMAND              0
+#define ST_DATA                 1
 
-#define RATIO_SPI0_LCD_SCK	4
-#define RATIO_SPI0_LCD_A0		28
-#define RATIO_SPI0_LCD_MOSI	29
-#define RATIO_SPI0_LCD_BSTB	30
-#define RATIO_SPI0_LCD_CS		31
+#define RATIO_SPI0_LCD_SCK      4
+#define RATIO_SPI0_LCD_A0       28
+#define RATIO_SPI0_LCD_MOSI     29
+#define RATIO_SPI0_LCD_BSTB     30
+#define RATIO_SPI0_LCD_CS       31
 
 static const nrf_drv_spi_t st7586_spi = NRF_DRV_SPI_INSTANCE(ST7586_SPI_INSTANCE);
 static volatile bool st7586_spi_xfer_done = false;

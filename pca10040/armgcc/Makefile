@@ -41,6 +41,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
  $(SDK_ROOT)/components/libraries/bsp/bsp.c \
  $(SDK_ROOT)/components/libraries/bsp/bsp_nfc.c \
+   $(SDK_ROOT)/components/drivers_nrf/timer/nrf_drv_timer.c \
   $(PROJ_DIR)/main.c \
  $(PROJ_DIR)/come_on_spi.c \
  $(PROJ_DIR)/come_on_ble.c \
@@ -169,6 +170,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/ble/ble_services/ble_lbs_c \
   $(SDK_ROOT)/components/ble/ble_racp \
   $(SDK_ROOT)/components/toolchain/gcc \
+   $(SDK_ROOT)/components/libraries/bsp \
   $(SDK_ROOT)/components/libraries/fds \
   $(SDK_ROOT)/components/libraries/twi \
   $(SDK_ROOT)/components/drivers_nrf/clock \

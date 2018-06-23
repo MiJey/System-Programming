@@ -29,16 +29,31 @@
 #define BUTTON_DETECTION_DELAY          APP_TIMER_TICKS(50)
 #define DEAD_BEEF                       0xDEADBEEF	// Value used as error code on stack dump, can be used to identify stack location on stack unwind.
 
-BLE_LBS_DEF(m_lbs);		// LED Button Service instance.
-NRF_BLE_GATT_DEF(m_gatt);	// GATT module instance.
-
-static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the current connection.
-
-/******************** 스케줄러 ********************/
-
 // Scheduler settings
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(nrf_drv_gpiote_pin_t)
 #define SCHED_QUEUE_SIZE                10
+
+BLE_LBS_DEF(m_lbs);             // LED Button Service instance.
+NRF_BLE_GATT_DEF(m_gatt);       // GATT module instance.
+APP_TIMER_DEF(m_game_timer_id); // 앱 타이머
+
+static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the current connection.
+
+/******************** 앱 타이머 ********************/
+
+static void game_timer_handler(void * p_context) {
+	bsp_board_led_invert(0);
+}
+
+static void create_game_timer() {
+	uint32_t err_code = app_timer_create(&m_game_timer_id, APP_TIMER_MODE_REPEATED, game_timer_handler);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL);
+        APP_ERROR_CHECK(err_code);
+}
+
+/******************** 스케줄러 ********************/
 
 static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
 	uint8_t pin = *((uint8_t*)p_event_data);
@@ -335,6 +350,7 @@ void ble_start() {
 	
 	// scheduler
 	app_timer_init();
+	create_game_timer();	// 앱 타이머
 	buttons_init();
 	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 	
