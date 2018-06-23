@@ -40,7 +40,7 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the curren
 
 /******************** 앱 타이머 ********************/
 
-APP_TIMER_DEF(m_game_timer_id); // 앱 타이머
+APP_TIMER_DEF(m_game_timer_id); // 게임 시간 타이머
 APP_TIMER_DEF(m_p1_timer_id); // P1 이동 타이머
 APP_TIMER_DEF(m_p2_timer_id); // P2 이동 타이머
 
@@ -48,7 +48,7 @@ uint8_t game_time = 10;
 uint8_t p1_time = 0;
 uint8_t p2_time = 0;
 
-// 1초마다 줄어드는 게임 시간
+// 1초마다 줄어드는 게임 타이머
 static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 	draw_time(game_time);
 	if(game_time == 0) { 
@@ -59,54 +59,30 @@ static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 	bsp_board_led_invert(0);
 }
 
-// 플레이어 1이 움직이는 시간
-static void p1_timer_scheduler(void *p_event_data, uint16_t event_size) {
-	//uint8_t p1_time = *((uint8_t*)p_event_data);
-	// TODO p1 이동
-	p1_move_right();
-	bsp_board_led_invert(1);
-}
-
-// 플레이어 2가 움직이는 시간
-static void p2_timer_scheduler(void *p_event_data, uint16_t event_size) {
-	// TODO p2 이동
-	bsp_board_led_invert(2);
-}
+// 플레이어가 움직이는 타이머
+static void p1_timer_scheduler(void *p_event_data, uint16_t event_size) { move_player(0); }
+static void p2_timer_scheduler(void *p_event_data, uint16_t event_size) { move_player(1); }
 
 // timer handler --> scheduler
-static void game_timer_handler(void *p_context) {
-	app_sched_event_put(&game_time, sizeof(game_time), game_timer_scheduler); }
-static void p1_timer_handler(void *p_context) {
-	app_sched_event_put(&p1_time, sizeof(p1_time), p1_timer_scheduler); }
-static void p2_timer_handler(void *p_context) {
-	app_sched_event_put(&p2_time, sizeof(p2_time), p2_timer_scheduler); }
+static void game_timer_handler(void *p_context) { app_sched_event_put(&game_time, sizeof(game_time), game_timer_scheduler); }
+static void p1_timer_handler(void *p_context) { app_sched_event_put(&p1_time, sizeof(p1_time), p1_timer_scheduler); }
+static void p2_timer_handler(void *p_context) { app_sched_event_put(&p2_time, sizeof(p2_time), p2_timer_scheduler); }
 
-// timer start
-static void start_game_timer() {
-	uint32_t err_code = app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL);
-        APP_ERROR_CHECK(err_code);
-}
-static void start_p1_timer() {
-	uint32_t err_code = app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(200), NULL);	// 0.2초마다 이동
-        APP_ERROR_CHECK(err_code);
-}
-static void start_p2_timer() {
-	uint32_t err_code = app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(200), NULL);
-        APP_ERROR_CHECK(err_code);
+// start timer
+static void start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL); }
+static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(200), NULL); }	// 0.2초마다 이동
+static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(200), NULL); }
+
+// stop timer
+static void stop_p1_timer() {
+	app_timer_stop(m_p1_timer_id);
+	stop_player(0);
 }
 
 static void create_timers() {
-	// 게임 시간(60초) 타이머
-	uint32_t err_code = app_timer_create(&m_game_timer_id, APP_TIMER_MODE_REPEATED, game_timer_handler);
-	APP_ERROR_CHECK(err_code);
-
-	// 플레이어 1 이동 타이머
-	err_code = app_timer_create(&m_p1_timer_id, APP_TIMER_MODE_REPEATED, p1_timer_handler);
-	APP_ERROR_CHECK(err_code);
-	
-	// 플레이어 2 이동 타이머
-	err_code = app_timer_create(&m_p2_timer_id, APP_TIMER_MODE_REPEATED, p2_timer_handler);
-	APP_ERROR_CHECK(err_code);
+	app_timer_create(&m_game_timer_id, APP_TIMER_MODE_REPEATED, game_timer_handler); // 게임 시간(60초) 타이머
+	app_timer_create(&m_p1_timer_id, APP_TIMER_MODE_REPEATED, p1_timer_handler);     // 플레이어 1 이동 타이머
+	app_timer_create(&m_p2_timer_id, APP_TIMER_MODE_REPEATED, p2_timer_handler);     // 플레이어 2 이동 타이머
 }
 
 /******************** 스케줄러 ********************/
@@ -125,7 +101,11 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 		break;
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 33);	// 32, 33
-		// p1_move_right();
+		
+		player[0].status = WALK;
+		player[0].direction = RIGHT;
+		
+		start_p1_timer();
 		break;
 	}
 }
@@ -144,6 +124,11 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 		break;
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 32);	// 32, 33
+		
+		if(player[0].status != JUMP) { player[0].status = READY; }
+		player[0].direction = NEUTRAL;
+		
+		stop_p1_timer();
 		break;
 	}
 }
@@ -408,7 +393,7 @@ void ble_start() {
 	app_timer_init();
 	create_timers();	// 앱 타이머
 	start_game_timer();
-	start_p1_timer();
+	
 	start_p2_timer();
 	buttons_init();
 	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);

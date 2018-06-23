@@ -41,6 +41,7 @@ Allocating common symbols
 Common symbol       size              file
 
 nrf_nvic_state      0xc               _build/nrf52832_xxaa/app_util_platform.c.o
+player              0x10              _build/nrf52832_xxaa/come_on_game.c.o
 _SEGGER_RTT         0x78              _build/nrf52832_xxaa/SEGGER_RTT.c.o
 
 Discarded input sections
@@ -4291,9 +4292,11 @@ Discarded input sections
  .text.draw_jump
                 0x0000000000000000       0x88 _build/nrf52832_xxaa/come_on_draw.c.o
  .text.draw_go  0x0000000000000000       0x80 _build/nrf52832_xxaa/come_on_draw.c.o
- .rodata.draw_GO.10593
+ .text.draw_player
+                0x0000000000000000        0x4 _build/nrf52832_xxaa/come_on_draw.c.o
+ .rodata.draw_GO.10629
                 0x0000000000000000       0xdc _build/nrf52832_xxaa/come_on_draw.c.o
- .rodata.jump.10542
+ .rodata.jump.10578
                 0x0000000000000000      0x12c _build/nrf52832_xxaa/come_on_draw.c.o
  .debug_macro   0x0000000000000000      0x8b0 _build/nrf52832_xxaa/come_on_draw.c.o
  .debug_macro   0x0000000000000000       0x22 _build/nrf52832_xxaa/come_on_draw.c.o
@@ -6166,7 +6169,7 @@ RAM              0x0000000020002180 0x000000000000de80 xrw
 Linker script and memory map
 
 
-.text           0x0000000000023000     0x7d8c
+.text           0x0000000000023000     0x8024
  *(.isr_vector)
  .isr_vector    0x0000000000023000      0x200 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
                 0x0000000000023000                __isr_vector
@@ -6456,226 +6459,235 @@ Linker script and memory map
  .text.p2_timer_scheduler
                 0x00000000000273cc        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.p1_timer_scheduler
-                0x00000000000273d4       0x10 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x00000000000273d4        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.game_timer_scheduler
-                0x00000000000273e4       0x30 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x00000000000273dc       0x30 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.led_write_handler
-                0x0000000000027414       0x44 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002740c       0x44 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.on_conn_params_evt
-                0x0000000000027458       0x24 _build/nrf52832_xxaa/come_on_ble.c.o
- .text.button_released_scheduler_event_handler
-                0x000000000002747c       0x4c _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000000027450       0x24 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.button_pressed_scheduler_event_handler
-                0x00000000000274c8       0x4c _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000000027474       0x7c _build/nrf52832_xxaa/come_on_ble.c.o
+ .text.button_released_scheduler_event_handler
+                0x00000000000274f0       0x88 _build/nrf52832_xxaa/come_on_ble.c.o
  .text.ble_evt_handler
-                0x0000000000027514      0x17c _build/nrf52832_xxaa/come_on_ble.c.o
-                0x0000000000027514                ble_evt_handler
+                0x0000000000027578      0x17c _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000000027578                ble_evt_handler
  .text.ble_start
-                0x0000000000027690      0x26c _build/nrf52832_xxaa/come_on_ble.c.o
-                0x0000000000027690                ble_start
+                0x00000000000276f4      0x22c _build/nrf52832_xxaa/come_on_ble.c.o
+                0x00000000000276f4                ble_start
+ .text.draw_ready_p
+                0x0000000000027920       0x94 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027920                draw_ready_p
  .text.draw_walk_a
-                0x00000000000278fc       0x94 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x00000000000278fc                draw_walk_a
+                0x00000000000279b4       0x94 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x00000000000279b4                draw_walk_a
  .text.draw_walk_b
-                0x0000000000027990       0x94 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027990                draw_walk_b
- .text.draw_hp  0x0000000000027a24      0x1c4 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027a24                draw_hp
+                0x0000000000027a48       0x94 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027a48                draw_walk_b
+ .text.draw_hp  0x0000000000027adc      0x1c4 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027adc                draw_hp
  .text.draw_circle
-                0x0000000000027be8      0x190 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027be8                draw_circle
+                0x0000000000027ca0      0x190 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027ca0                draw_circle
  .text.draw_ready
-                0x0000000000027d78       0x80 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027d78                draw_ready
+                0x0000000000027e30       0x80 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027e30                draw_ready
  .text.draw_splash
-                0x0000000000027df8       0x8c _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027df8                draw_splash
+                0x0000000000027eb0       0x8c _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027eb0                draw_splash
  .text.draw_clear
-                0x0000000000027e84       0xbc _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027e84                draw_clear
+                0x0000000000027f3c       0x8c _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027f3c                draw_clear
+ .text.draw_clear_previous
+                0x0000000000027fc8       0xbc _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000027fc8                draw_clear_previous
  .text.draw_time
-                0x0000000000027f40      0x128 _build/nrf52832_xxaa/come_on_draw.c.o
-                0x0000000000027f40                draw_time
- .text.p1_move_right
-                0x0000000000028068       0x54 _build/nrf52832_xxaa/come_on_game.c.o
-                0x0000000000028068                p1_move_right
+                0x0000000000028084      0x128 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000028084                draw_time
+ .text.move_player
+                0x00000000000281ac       0x60 _build/nrf52832_xxaa/come_on_game.c.o
+                0x00000000000281ac                move_player
+ .text.stop_player
+                0x000000000002820c       0x14 _build/nrf52832_xxaa/come_on_game.c.o
+                0x000000000002820c                stop_player
  .text.game_ready
-                0x00000000000280bc       0x4c _build/nrf52832_xxaa/come_on_game.c.o
-                0x00000000000280bc                game_ready
+                0x0000000000028220       0x90 _build/nrf52832_xxaa/come_on_game.c.o
+                0x0000000000028220                game_ready
  .text.sd_ble_gap_addr_get
-                0x0000000000028108        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282b0        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.sd_ble_gap_adv_data_set
-                0x000000000002810c        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282b4        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.sd_ble_gap_appearance_get
-                0x0000000000028110        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282b8        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.sd_ble_gap_device_name_get
-                0x0000000000028114        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282bc        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.sd_ble_uuid_encode
-                0x0000000000028118        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282c0        0x4 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.name_encode
-                0x000000000002811c       0x90 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x00000000000282c4       0x90 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.uuid_list_sized_encode
-                0x00000000000281ac       0xc0 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x0000000000028354       0xc0 _build/nrf52832_xxaa/ble_advdata.c.o
  .text.ble_advdata_encode
-                0x000000000002826c      0x37c _build/nrf52832_xxaa/ble_advdata.c.o
-                0x000000000002826c                ble_advdata_encode
+                0x0000000000028414      0x37c _build/nrf52832_xxaa/ble_advdata.c.o
+                0x0000000000028414                ble_advdata_encode
  .text.ble_advdata_set
-                0x00000000000285e8      0x460 _build/nrf52832_xxaa/ble_advdata.c.o
-                0x00000000000285e8                ble_advdata_set
+                0x0000000000028790      0x460 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x0000000000028790                ble_advdata_set
  .text.sd_ble_gap_conn_param_update
-                0x0000000000028a48        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028bf0        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.sd_ble_gap_disconnect
-                0x0000000000028a4c        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028bf4        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.sd_ble_gap_ppcp_set
-                0x0000000000028a50        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028bf8        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.sd_ble_gap_ppcp_get
-                0x0000000000028a54        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028bfc        0x4 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.update_timeout_handler
-                0x0000000000028a58       0x80 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028c00       0x80 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.ble_evt_handler
-                0x0000000000028ad8      0x200 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028c80      0x200 _build/nrf52832_xxaa/ble_conn_params.c.o
  .text.ble_conn_params_init
-                0x0000000000028cd8       0x80 _build/nrf52832_xxaa/ble_conn_params.c.o
-                0x0000000000028cd8                ble_conn_params_init
+                0x0000000000028e80       0x80 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000028e80                ble_conn_params_init
  .text.ble_evt_handler
-                0x0000000000028d58      0x110 _build/nrf52832_xxaa/ble_conn_state.c.o
+                0x0000000000028f00      0x110 _build/nrf52832_xxaa/ble_conn_state.c.o
  .text.ble_srv_is_notification_enabled
-                0x0000000000028e68        0x8 _build/nrf52832_xxaa/ble_srv_common.c.o
-                0x0000000000028e68                ble_srv_is_notification_enabled
+                0x0000000000029010        0x8 _build/nrf52832_xxaa/ble_srv_common.c.o
+                0x0000000000029010                ble_srv_is_notification_enabled
  .text.sd_ble_gap_data_length_update
-                0x0000000000028e70        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000000029018        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
  .text.sd_ble_gattc_exchange_mtu_request
-                0x0000000000028e74        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x000000000002901c        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
  .text.sd_ble_gatts_exchange_mtu_reply
-                0x0000000000028e78        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000000029020        0x4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
  .text.nrf_ble_gatt_init
-                0x0000000000028e7c       0x2c _build/nrf52832_xxaa/nrf_ble_gatt.c.o
-                0x0000000000028e7c                nrf_ble_gatt_init
+                0x0000000000029024       0x2c _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000000029024                nrf_ble_gatt_init
  .text.nrf_ble_gatt_on_ble_evt
-                0x0000000000028ea8      0x210 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
-                0x0000000000028ea8                nrf_ble_gatt_on_ble_evt
- .text          0x00000000000290b8       0x3c _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
-                0x00000000000290b8                Reset_Handler
-                0x00000000000290e0                NMI_Handler
-                0x00000000000290e2                HardFault_Handler
-                0x00000000000290e4                MemoryManagement_Handler
-                0x00000000000290e6                BusFault_Handler
-                0x00000000000290e8                UsageFault_Handler
-                0x00000000000290ea                SVC_Handler
-                0x00000000000290ec                DebugMon_Handler
-                0x00000000000290ee                PendSV_Handler
-                0x00000000000290f0                SysTick_Handler
-                0x00000000000290f2                TIMER2_IRQHandler
-                0x00000000000290f2                RTC0_IRQHandler
-                0x00000000000290f2                PWM1_IRQHandler
-                0x00000000000290f2                RADIO_IRQHandler
-                0x00000000000290f2                PDM_IRQHandler
-                0x00000000000290f2                TEMP_IRQHandler
-                0x00000000000290f2                QDEC_IRQHandler
-                0x00000000000290f2                TIMER3_IRQHandler
-                0x00000000000290f2                FPU_IRQHandler
-                0x00000000000290f2                TIMER4_IRQHandler
-                0x00000000000290f2                I2S_IRQHandler
-                0x00000000000290f2                SWI4_EGU4_IRQHandler
-                0x00000000000290f2                TIMER1_IRQHandler
-                0x00000000000290f2                PWM2_IRQHandler
-                0x00000000000290f2                ECB_IRQHandler
-                0x00000000000290f2                Default_Handler
-                0x00000000000290f2                SAADC_IRQHandler
-                0x00000000000290f2                CCM_AAR_IRQHandler
-                0x00000000000290f2                WDT_IRQHandler
-                0x00000000000290f2                SWI5_EGU5_IRQHandler
-                0x00000000000290f2                RNG_IRQHandler
-                0x00000000000290f2                RTC2_IRQHandler
-                0x00000000000290f2                PWM0_IRQHandler
-                0x00000000000290f2                SWI3_EGU3_IRQHandler
-                0x00000000000290f2                SWI1_EGU1_IRQHandler
-                0x00000000000290f2                SPIM2_SPIS2_SPI2_IRQHandler
-                0x00000000000290f2                NFCT_IRQHandler
-                0x00000000000290f2                MWU_IRQHandler
-                0x00000000000290f2                COMP_LPCOMP_IRQHandler
+                0x0000000000029050      0x210 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000000029050                nrf_ble_gatt_on_ble_evt
+ .text          0x0000000000029260       0x3c _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+                0x0000000000029260                Reset_Handler
+                0x0000000000029288                NMI_Handler
+                0x000000000002928a                HardFault_Handler
+                0x000000000002928c                MemoryManagement_Handler
+                0x000000000002928e                BusFault_Handler
+                0x0000000000029290                UsageFault_Handler
+                0x0000000000029292                SVC_Handler
+                0x0000000000029294                DebugMon_Handler
+                0x0000000000029296                PendSV_Handler
+                0x0000000000029298                SysTick_Handler
+                0x000000000002929a                TIMER2_IRQHandler
+                0x000000000002929a                RTC0_IRQHandler
+                0x000000000002929a                PWM1_IRQHandler
+                0x000000000002929a                RADIO_IRQHandler
+                0x000000000002929a                PDM_IRQHandler
+                0x000000000002929a                TEMP_IRQHandler
+                0x000000000002929a                QDEC_IRQHandler
+                0x000000000002929a                TIMER3_IRQHandler
+                0x000000000002929a                FPU_IRQHandler
+                0x000000000002929a                TIMER4_IRQHandler
+                0x000000000002929a                I2S_IRQHandler
+                0x000000000002929a                SWI4_EGU4_IRQHandler
+                0x000000000002929a                TIMER1_IRQHandler
+                0x000000000002929a                PWM2_IRQHandler
+                0x000000000002929a                ECB_IRQHandler
+                0x000000000002929a                Default_Handler
+                0x000000000002929a                SAADC_IRQHandler
+                0x000000000002929a                CCM_AAR_IRQHandler
+                0x000000000002929a                WDT_IRQHandler
+                0x000000000002929a                SWI5_EGU5_IRQHandler
+                0x000000000002929a                RNG_IRQHandler
+                0x000000000002929a                RTC2_IRQHandler
+                0x000000000002929a                PWM0_IRQHandler
+                0x000000000002929a                SWI3_EGU3_IRQHandler
+                0x000000000002929a                SWI1_EGU1_IRQHandler
+                0x000000000002929a                SPIM2_SPIS2_SPI2_IRQHandler
+                0x000000000002929a                NFCT_IRQHandler
+                0x000000000002929a                MWU_IRQHandler
+                0x000000000002929a                COMP_LPCOMP_IRQHandler
  .text.SystemInit
-                0x00000000000290f4      0x384 _build/nrf52832_xxaa/system_nrf52.c.o
-                0x00000000000290f4                SystemInit
+                0x000000000002929c      0x384 _build/nrf52832_xxaa/system_nrf52.c.o
+                0x000000000002929c                SystemInit
  .text.sd_ble_gatts_service_add
-                0x0000000000029478        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029620        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
  .text.sd_ble_gatts_characteristic_add
-                0x000000000002947c        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029624        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
  .text.sd_ble_gatts_hvx
-                0x0000000000029480        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029628        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
  .text.sd_ble_uuid_vs_add
-                0x0000000000029484        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x000000000002962c        0x4 _build/nrf52832_xxaa/ble_lbs.c.o
  .text.ble_lbs_on_ble_evt
-                0x0000000000029488       0x34 _build/nrf52832_xxaa/ble_lbs.c.o
-                0x0000000000029488                ble_lbs_on_ble_evt
+                0x0000000000029630       0x34 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029630                ble_lbs_on_ble_evt
  .text.ble_lbs_init
-                0x00000000000294bc      0x1d4 _build/nrf52832_xxaa/ble_lbs.c.o
-                0x00000000000294bc                ble_lbs_init
+                0x0000000000029664      0x1d4 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029664                ble_lbs_init
  .text.ble_lbs_on_button_change
-                0x0000000000029690       0x40 _build/nrf52832_xxaa/ble_lbs.c.o
-                0x0000000000029690                ble_lbs_on_button_change
+                0x0000000000029838       0x40 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000029838                ble_lbs_on_button_change
  .text.sd_softdevice_enable
-                0x00000000000296d0        0x4 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000000029878        0x4 _build/nrf52832_xxaa/nrf_sdh.c.o
  .text.nrf_sdh_enable_request
-                0x00000000000296d4       0xfc _build/nrf52832_xxaa/nrf_sdh.c.o
-                0x00000000000296d4                nrf_sdh_enable_request
+                0x000000000002987c       0xfc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002987c                nrf_sdh_enable_request
  .text.nrf_sdh_is_enabled
-                0x00000000000297d0        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
-                0x00000000000297d0                nrf_sdh_is_enabled
+                0x0000000000029978        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000000029978                nrf_sdh_is_enabled
  .text.SWI2_EGU2_IRQHandler
-                0x00000000000297dc       0x2c _build/nrf52832_xxaa/nrf_sdh.c.o
-                0x00000000000297dc                SWI2_EGU2_IRQHandler
+                0x0000000000029984       0x2c _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000000029984                SWI2_EGU2_IRQHandler
  .text.sd_ble_enable
-                0x0000000000029808        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x00000000000299b0        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .text.sd_ble_cfg_set
-                0x000000000002980c        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x00000000000299b4        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .text.sd_ble_evt_get
-                0x0000000000029810        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x00000000000299b8        0x4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .text.nrf_sdh_ble_evts_poll
-                0x0000000000029814       0x4c _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x00000000000299bc       0x4c _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .text.nrf_sdh_ble_default_cfg_set
-                0x0000000000029860      0x168 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
-                0x0000000000029860                nrf_sdh_ble_default_cfg_set
+                0x0000000000029a08      0x168 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x0000000000029a08                nrf_sdh_ble_default_cfg_set
  .text.nrf_sdh_ble_enable
-                0x00000000000299c8       0x74 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
-                0x00000000000299c8                nrf_sdh_ble_enable
+                0x0000000000029b70       0x74 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x0000000000029b70                nrf_sdh_ble_enable
  .text.sd_evt_get
-                0x0000000000029a3c        0x4 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x0000000000029be4        0x4 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
  .text.nrf_sdh_soc_evts_poll
-                0x0000000000029a40       0x4c _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .text.atexit   0x0000000000029a8c        0xc /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
-                0x0000000000029a8c                atexit
- .text.exit     0x0000000000029a98       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
-                0x0000000000029a98                exit
+                0x0000000000029be8       0x4c _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .text.atexit   0x0000000000029c34        0xc /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+                0x0000000000029c34                atexit
+ .text.exit     0x0000000000029c40       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+                0x0000000000029c40                exit
  .text.__libc_fini_array
-                0x0000000000029ac0       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
-                0x0000000000029ac0                __libc_fini_array
+                0x0000000000029c68       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+                0x0000000000029c68                __libc_fini_array
  .text.__libc_init_array
-                0x0000000000029ae8       0x4c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
-                0x0000000000029ae8                __libc_init_array
- .text.memcpy   0x0000000000029b34       0x16 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
-                0x0000000000029b34                memcpy
- .text.memset   0x0000000000029b4a       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
-                0x0000000000029b4a                memset
- .text.strlen   0x0000000000029b5a       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
-                0x0000000000029b5a                strlen
- *fill*         0x0000000000029b6a        0x2 
+                0x0000000000029c90       0x4c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+                0x0000000000029c90                __libc_init_array
+ .text.memcpy   0x0000000000029cdc       0x16 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+                0x0000000000029cdc                memcpy
+ .text.memset   0x0000000000029cf2       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+                0x0000000000029cf2                memset
+ .text.strlen   0x0000000000029d02       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+                0x0000000000029d02                strlen
+ *fill*         0x0000000000029d12        0x2 
  .text.__register_exitproc
-                0x0000000000029b6c       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
-                0x0000000000029b6c                __register_exitproc
+                0x0000000000029d14       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+                0x0000000000029d14                __register_exitproc
  .text.__call_exitprocs
-                0x0000000000029c24       0xd4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
-                0x0000000000029c24                __call_exitprocs
- .text._exit    0x0000000000029cf8        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
-                0x0000000000029cf8                _exit
+                0x0000000000029dcc       0xd4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000000029dcc                __call_exitprocs
+ .text._exit    0x0000000000029ea0        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+                0x0000000000029ea0                _exit
  *(.init)
- .init          0x0000000000029cfc        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crti.o
-                0x0000000000029cfc                _init
- .init          0x0000000000029d00        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtn.o
+ .init          0x0000000000029ea4        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crti.o
+                0x0000000000029ea4                _init
+ .init          0x0000000000029ea8        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtn.o
  *(.fini)
- .fini          0x0000000000029d08        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crti.o
-                0x0000000000029d08                _fini
- .fini          0x0000000000029d0c        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtn.o
+ .fini          0x0000000000029eb0        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crti.o
+                0x0000000000029eb0                _fini
+ .fini          0x0000000000029eb4        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -6687,249 +6699,251 @@ Linker script and memory map
  *(SORT(.dtors.*))
  *(.dtors)
  *(.rodata*)
- .rodata        0x0000000000029d14       0x20 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
+ .rodata        0x0000000000029ebc       0x20 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .rodata.nrf_log_backend_uart_api
-                0x0000000000029d34        0xc _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
-                0x0000000000029d34                nrf_log_backend_uart_api
+                0x0000000000029edc        0xc _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
+                0x0000000000029edc                nrf_log_backend_uart_api
  .rodata.str1.4
-                0x0000000000029d40        0x4 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x0000000000029ee8        0x4 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .rodata.mempool
-                0x0000000000029d44       0x14 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x0000000000029eec       0x14 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .rodata.severity_names
-                0x0000000000029d58       0x14 _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
+                0x0000000000029f00       0x14 _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
  .rodata.m_colors
-                0x0000000000029d6c       0x24 _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
+                0x0000000000029f14       0x24 _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
  .rodata.str1.4
-                0x0000000000029d90       0x8e _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
+                0x0000000000029f38       0x8e _build/nrf52832_xxaa/nrf_log_str_formatter.c.o
                                          0x92 (size before relaxing)
- *fill*         0x0000000000029e1e        0x2 
+ *fill*         0x0000000000029fc6        0x2 
  .rodata.m_detection_delay_timer_id
-                0x0000000000029e20        0x4 _build/nrf52832_xxaa/app_button.c.o
+                0x0000000000029fc8        0x4 _build/nrf52832_xxaa/app_button.c.o
  .rodata.str1.4
-                0x0000000000029e24       0x19 _build/nrf52832_xxaa/app_error_weak.c.o
- *fill*         0x0000000000029e3d        0x3 
+                0x0000000000029fcc       0x19 _build/nrf52832_xxaa/app_error_weak.c.o
+ *fill*         0x0000000000029fe5        0x3 
  .rodata.str1.4
-                0x0000000000029e40        0x7 _build/nrf52832_xxaa/nrf_balloc.c.o
- *fill*         0x0000000000029e47        0x1 
+                0x0000000000029fe8        0x7 _build/nrf52832_xxaa/nrf_balloc.c.o
+ *fill*         0x0000000000029fef        0x1 
  .rodata._aV2C.6815
-                0x0000000000029e48       0x10 _build/nrf52832_xxaa/nrf_fprintf_format.c.o
+                0x0000000000029ff0       0x10 _build/nrf52832_xxaa/nrf_fprintf_format.c.o
  .rodata.str1.4
-                0x0000000000029e58        0x9 _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
- *fill*         0x0000000000029e61        0x3 
+                0x000000000002a000        0x9 _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
+ *fill*         0x000000000002a009        0x3 
  .rodata.str1.4
-                0x0000000000029e64      0x308 _build/nrf52832_xxaa/nrf_strerror.c.o
+                0x000000000002a00c      0x308 _build/nrf52832_xxaa/nrf_strerror.c.o
  .rodata.nrf_strerror_array
-                0x000000000002a16c       0xf0 _build/nrf52832_xxaa/nrf_strerror.c.o
+                0x000000000002a314       0xf0 _build/nrf52832_xxaa/nrf_strerror.c.o
  .rodata.m_unknown_str
-                0x000000000002a25c       0x13 _build/nrf52832_xxaa/nrf_strerror.c.o
- *fill*         0x000000000002a26f        0x1 
+                0x000000000002a404       0x13 _build/nrf52832_xxaa/nrf_strerror.c.o
+ *fill*         0x000000000002a417        0x1 
  .rodata.m_board_led_list
-                0x000000000002a270        0x4 _build/nrf52832_xxaa/boards.c.o
+                0x000000000002a418        0x4 _build/nrf52832_xxaa/boards.c.o
  .rodata.str1.4
-                0x000000000002a274        0x6 _build/nrf52832_xxaa/nrf_drv_clock.c.o
- *fill*         0x000000000002a27a        0x2 
+                0x000000000002a41c        0x6 _build/nrf52832_xxaa/nrf_drv_clock.c.o
+ *fill*         0x000000000002a422        0x2 
  .rodata.str1.4
-                0x000000000002a27c        0x7 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
- *fill*         0x000000000002a283        0x1 
+                0x000000000002a424        0x7 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
+ *fill*         0x000000000002a42b        0x1 
  .rodata.str1.4
-                0x000000000002a284        0x4 _build/nrf52832_xxaa/nrf_drv_spi.c.o
+                0x000000000002a42c        0x4 _build/nrf52832_xxaa/nrf_drv_spi.c.o
  .rodata.str1.4
-                0x000000000002a288        0x5 _build/nrf52832_xxaa/nrf_drv_uart.c.o
- *fill*         0x000000000002a28d        0x3 
+                0x000000000002a430        0x5 _build/nrf52832_xxaa/nrf_drv_uart.c.o
+ *fill*         0x000000000002a435        0x3 
  .rodata.str1.4
-                0x000000000002a290        0x6 _build/nrf52832_xxaa/nrf_drv_timer.c.o
- *fill*         0x000000000002a296        0x2 
- .rodata        0x000000000002a298       0x10 _build/nrf52832_xxaa/come_on_spi.c.o
+                0x000000000002a438        0x6 _build/nrf52832_xxaa/nrf_drv_timer.c.o
+ *fill*         0x000000000002a43e        0x2 
+ .rodata        0x000000000002a440       0x10 _build/nrf52832_xxaa/come_on_spi.c.o
  .rodata.st7586_spi
-                0x000000000002a2a8        0x8 _build/nrf52832_xxaa/come_on_spi.c.o
+                0x000000000002a450        0x8 _build/nrf52832_xxaa/come_on_spi.c.o
  .rodata.m_p2_timer_id
-                0x000000000002a2b0        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002a458        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
  .rodata.str1.4
-                0x000000000002a2b4       0x25 _build/nrf52832_xxaa/come_on_ble.c.o
- *fill*         0x000000000002a2d9        0x3 
+                0x000000000002a45c       0x25 _build/nrf52832_xxaa/come_on_ble.c.o
+ *fill*         0x000000000002a481        0x3 
  .rodata.m_p1_timer_id
-                0x000000000002a2dc        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002a484        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
  .rodata.m_game_timer_id
-                0x000000000002a2e0        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
- .rodata.walk_b.10534
-                0x000000000002a2e4       0xf0 _build/nrf52832_xxaa/come_on_draw.c.o
- .rodata.draw_READY.10587
-                0x000000000002a3d4      0x1f4 _build/nrf52832_xxaa/come_on_draw.c.o
- .rodata.num.10620
-                0x000000000002a5c8      0x1e0 _build/nrf52832_xxaa/come_on_draw.c.o
- .rodata.filled_circle.10578
-                0x000000000002a7a8       0x1e _build/nrf52832_xxaa/come_on_draw.c.o
- *fill*         0x000000000002a7c6        0x2 
- .rodata.empty_circle.10577
-                0x000000000002a7c8       0x1e _build/nrf52832_xxaa/come_on_draw.c.o
- *fill*         0x000000000002a7e6        0x2 
- .rodata.walk_a.10526
-                0x000000000002a7e8       0xf0 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x000000000002a488        0x4 _build/nrf52832_xxaa/come_on_ble.c.o
+ .rodata.empty_circle.10613
+                0x000000000002a48c       0x1e _build/nrf52832_xxaa/come_on_draw.c.o
+ *fill*         0x000000000002a4aa        0x2 
+ .rodata.num.10664
+                0x000000000002a4ac      0x1e0 _build/nrf52832_xxaa/come_on_draw.c.o
+ .rodata.walk_a.10562
+                0x000000000002a68c       0xf0 _build/nrf52832_xxaa/come_on_draw.c.o
+ .rodata.draw_READY.10623
+                0x000000000002a77c      0x1f4 _build/nrf52832_xxaa/come_on_draw.c.o
+ .rodata.ready.10554
+                0x000000000002a970       0xf0 _build/nrf52832_xxaa/come_on_draw.c.o
+ .rodata.filled_circle.10614
+                0x000000000002aa60       0x1e _build/nrf52832_xxaa/come_on_draw.c.o
+ *fill*         0x000000000002aa7e        0x2 
+ .rodata.walk_b.10570
+                0x000000000002aa80       0xf0 _build/nrf52832_xxaa/come_on_draw.c.o
  .rodata.str1.4
-                0x000000000002a8d8      0x139 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- *fill*         0x000000000002aa11        0x3 
- .rodata        0x000000000002aa14       0x10 _build/nrf52832_xxaa/ble_lbs.c.o
- .rodata        0x000000000002aa24        0x4 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002ab70      0x139 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ *fill*         0x000000000002aca9        0x3 
+ .rodata        0x000000000002acac       0x10 _build/nrf52832_xxaa/ble_lbs.c.o
+ .rodata        0x000000000002acbc        0x4 _build/nrf52832_xxaa/nrf_sdh.c.o
  .rodata.sdh_req_observers
-                0x000000000002aa28        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002acc0        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
  .rodata.sdh_state_observers
-                0x000000000002aa34        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002accc        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
  .rodata.str1.4
-                0x000000000002aa40        0x8 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002acd8        0x8 _build/nrf52832_xxaa/nrf_sdh.c.o
  .rodata.sdh_stack_observers
-                0x000000000002aa48        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002ace0        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
  .rodata.sdh_ble_observers
-                0x000000000002aa54        0xc _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x000000000002acec        0xc _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .rodata.str1.4
-                0x000000000002aa60      0x208 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x000000000002acf8      0x208 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .rodata.sdh_soc_observers
-                0x000000000002ac68        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x000000000002af00        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
  .rodata.str1.4
-                0x000000000002ac74        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x000000000002af0c        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
  .rodata._ctype_
-                0x000000000002ac80      0x101 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
-                0x000000000002ac80                _ctype_
+                0x000000000002af18      0x101 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+                0x000000000002af18                _ctype_
  .rodata.str1.1
-                0x000000000002ad81        0x2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
- *fill*         0x000000000002ad83        0x1 
+                0x000000000002b019        0x2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+ *fill*         0x000000000002b01b        0x1 
  .rodata._global_impure_ptr
-                0x000000000002ad84        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
-                0x000000000002ad84                _global_impure_ptr
+                0x000000000002b01c        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+                0x000000000002b01c                _global_impure_ptr
  *(.eh_frame*)
- .eh_frame      0x000000000002ad88        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
- .eh_frame      0x000000000002ad88        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
+ .eh_frame      0x000000000002b020        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+ .eh_frame      0x000000000002b020        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
 
-.glue_7         0x000000000002ad8c        0x0
- .glue_7        0x000000000002ad8c        0x0 linker stubs
+.glue_7         0x000000000002b024        0x0
+ .glue_7        0x000000000002b024        0x0 linker stubs
 
-.glue_7t        0x000000000002ad8c        0x0
- .glue_7t       0x000000000002ad8c        0x0 linker stubs
+.glue_7t        0x000000000002b024        0x0
+ .glue_7t       0x000000000002b024        0x0 linker stubs
 
-.vfp11_veneer   0x000000000002ad8c        0x0
- .vfp11_veneer  0x000000000002ad8c        0x0 linker stubs
+.vfp11_veneer   0x000000000002b024        0x0
+ .vfp11_veneer  0x000000000002b024        0x0 linker stubs
 
-.v4_bx          0x000000000002ad8c        0x0
- .v4_bx         0x000000000002ad8c        0x0 linker stubs
+.v4_bx          0x000000000002b024        0x0
+ .v4_bx         0x000000000002b024        0x0 linker stubs
 
-.iplt           0x000000000002ad8c        0x0
- .iplt          0x000000000002ad8c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+.iplt           0x000000000002b024        0x0
+ .iplt          0x000000000002b024        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
 
 .mem_section_dummy_rom
 
 .sdh_soc_observers
-                0x000000000002ad8c        0x8
-                0x000000000002ad8c                PROVIDE (__start_sdh_soc_observers, .)
+                0x000000000002b024        0x8
+                0x000000000002b024                PROVIDE (__start_sdh_soc_observers, .)
  *(SORT(.sdh_soc_observers*))
  .sdh_soc_observers0
-                0x000000000002ad8c        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
-                0x000000000002ad94                PROVIDE (__stop_sdh_soc_observers, .)
+                0x000000000002b024        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
+                0x000000000002b02c                PROVIDE (__stop_sdh_soc_observers, .)
 
-.pwr_mgmt_data  0x000000000002ad94        0x0
-                0x000000000002ad94                PROVIDE (__start_pwr_mgmt_data, .)
+.pwr_mgmt_data  0x000000000002b02c        0x0
+                0x000000000002b02c                PROVIDE (__start_pwr_mgmt_data, .)
  *(SORT(.pwr_mgmt_data*))
-                0x000000000002ad94                PROVIDE (__stop_pwr_mgmt_data, .)
+                0x000000000002b02c                PROVIDE (__stop_pwr_mgmt_data, .)
 
 .sdh_ble_observers
-                0x000000000002ad94       0x28
-                0x000000000002ad94                PROVIDE (__start_sdh_ble_observers, .)
+                0x000000000002b02c       0x28
+                0x000000000002b02c                PROVIDE (__start_sdh_ble_observers, .)
  *(SORT(.sdh_ble_observers*))
  .sdh_ble_observers0
-                0x000000000002ad94        0x8 _build/nrf52832_xxaa/ble_conn_state.c.o
+                0x000000000002b02c        0x8 _build/nrf52832_xxaa/ble_conn_state.c.o
  .sdh_ble_observers1
-                0x000000000002ad9c        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002b034        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
  .sdh_ble_observers1
-                0x000000000002ada4        0x8 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x000000000002b03c        0x8 _build/nrf52832_xxaa/ble_conn_params.c.o
  .sdh_ble_observers2
-                0x000000000002adac        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002b044        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
  .sdh_ble_observers3
-                0x000000000002adb4        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
-                0x000000000002adbc                PROVIDE (__stop_sdh_ble_observers, .)
+                0x000000000002b04c        0x8 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x000000000002b054                PROVIDE (__stop_sdh_ble_observers, .)
 
 .log_const_data
-                0x000000000002adbc       0x60
-                0x000000000002adbc                PROVIDE (__start_log_const_data, .)
+                0x000000000002b054       0x60
+                0x000000000002b054                PROVIDE (__start_log_const_data, .)
  *(SORT(.log_const_data*))
  .log_const_data_app
-                0x000000000002adbc        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
-                0x000000000002adbc                m_nrf_log_app_logs_data_const
+                0x000000000002b054        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x000000000002b054                m_nrf_log_app_logs_data_const
  .log_const_data_balloc
-                0x000000000002adc4        0x8 _build/nrf52832_xxaa/nrf_balloc.c.o
-                0x000000000002adc4                m_nrf_log_balloc_logs_data_const
+                0x000000000002b05c        0x8 _build/nrf52832_xxaa/nrf_balloc.c.o
+                0x000000000002b05c                m_nrf_log_balloc_logs_data_const
  .log_const_data_ble_gatt
-                0x000000000002adcc        0x8 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
-                0x000000000002adcc                m_nrf_log_ble_gatt_logs_data_const
+                0x000000000002b064        0x8 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x000000000002b064                m_nrf_log_ble_gatt_logs_data_const
  .log_const_data_clock
-                0x000000000002add4        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
-                0x000000000002add4                m_nrf_log_clock_logs_data_const
+                0x000000000002b06c        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
+                0x000000000002b06c                m_nrf_log_clock_logs_data_const
  .log_const_data_gpiote
-                0x000000000002addc        0x8 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
-                0x000000000002addc                m_nrf_log_gpiote_logs_data_const
+                0x000000000002b074        0x8 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
+                0x000000000002b074                m_nrf_log_gpiote_logs_data_const
  .log_const_data_nrf_sdh
-                0x000000000002ade4        0x8 _build/nrf52832_xxaa/nrf_sdh.c.o
-                0x000000000002ade4                m_nrf_log_nrf_sdh_logs_data_const
+                0x000000000002b07c        0x8 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x000000000002b07c                m_nrf_log_nrf_sdh_logs_data_const
  .log_const_data_nrf_sdh_ble
-                0x000000000002adec        0x8 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
-                0x000000000002adec                m_nrf_log_nrf_sdh_ble_logs_data_const
+                0x000000000002b084        0x8 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x000000000002b084                m_nrf_log_nrf_sdh_ble_logs_data_const
  .log_const_data_nrf_sdh_soc
-                0x000000000002adf4        0x8 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
-                0x000000000002adf4                m_nrf_log_nrf_sdh_soc_logs_data_const
+                0x000000000002b08c        0x8 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x000000000002b08c                m_nrf_log_nrf_sdh_soc_logs_data_const
  .log_const_data_pwr_mgmt
-                0x000000000002adfc        0x8 _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
-                0x000000000002adfc                m_nrf_log_pwr_mgmt_logs_data_const
+                0x000000000002b094        0x8 _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
+                0x000000000002b094                m_nrf_log_pwr_mgmt_logs_data_const
  .log_const_data_spi
-                0x000000000002ae04        0x8 _build/nrf52832_xxaa/nrf_drv_spi.c.o
-                0x000000000002ae04                m_nrf_log_spi_logs_data_const
+                0x000000000002b09c        0x8 _build/nrf52832_xxaa/nrf_drv_spi.c.o
+                0x000000000002b09c                m_nrf_log_spi_logs_data_const
  .log_const_data_timer
-                0x000000000002ae0c        0x8 _build/nrf52832_xxaa/nrf_drv_timer.c.o
-                0x000000000002ae0c                m_nrf_log_timer_logs_data_const
+                0x000000000002b0a4        0x8 _build/nrf52832_xxaa/nrf_drv_timer.c.o
+                0x000000000002b0a4                m_nrf_log_timer_logs_data_const
  .log_const_data_uart
-                0x000000000002ae14        0x8 _build/nrf52832_xxaa/nrf_drv_uart.c.o
-                0x000000000002ae14                m_nrf_log_uart_logs_data_const
-                0x000000000002ae1c                PROVIDE (__stop_log_const_data, .)
+                0x000000000002b0ac        0x8 _build/nrf52832_xxaa/nrf_drv_uart.c.o
+                0x000000000002b0ac                m_nrf_log_uart_logs_data_const
+                0x000000000002b0b4                PROVIDE (__stop_log_const_data, .)
 
 .sdh_req_observers
-                0x000000000002ae1c        0x0
-                0x000000000002ae1c                PROVIDE (__start_sdh_req_observers, .)
+                0x000000000002b0b4        0x0
+                0x000000000002b0b4                PROVIDE (__start_sdh_req_observers, .)
  *(SORT(.sdh_req_observers*))
-                0x000000000002ae1c                PROVIDE (__stop_sdh_req_observers, .)
+                0x000000000002b0b4                PROVIDE (__stop_sdh_req_observers, .)
 
 .sdh_state_observers
-                0x000000000002ae1c        0x8
-                0x000000000002ae1c                PROVIDE (__start_sdh_state_observers, .)
+                0x000000000002b0b4        0x8
+                0x000000000002b0b4                PROVIDE (__start_sdh_state_observers, .)
  *(SORT(.sdh_state_observers*))
  .sdh_state_observers0
-                0x000000000002ae1c        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
-                0x000000000002ae24                PROVIDE (__stop_sdh_state_observers, .)
+                0x000000000002b0b4        0x8 _build/nrf52832_xxaa/nrf_drv_clock.c.o
+                0x000000000002b0bc                PROVIDE (__stop_sdh_state_observers, .)
 
 .sdh_stack_observers
-                0x000000000002ae24       0x10
-                0x000000000002ae24                PROVIDE (__start_sdh_stack_observers, .)
+                0x000000000002b0bc       0x10
+                0x000000000002b0bc                PROVIDE (__start_sdh_stack_observers, .)
  *(SORT(.sdh_stack_observers*))
  .sdh_stack_observers0
-                0x000000000002ae24        0x8 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x000000000002b0bc        0x8 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .sdh_stack_observers0
-                0x000000000002ae2c        0x8 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
-                0x000000000002ae34                PROVIDE (__stop_sdh_stack_observers, .)
+                0x000000000002b0c4        0x8 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x000000000002b0cc                PROVIDE (__stop_sdh_stack_observers, .)
 
-.cli_command    0x000000000002ae34        0x0
+.cli_command    0x000000000002b0cc        0x0
                 [!provide]                        PROVIDE (__start_cli_command, .)
  *(.cli_command)
                 [!provide]                        PROVIDE (__stop_cli_command, .)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x000000000002ae34                __exidx_start = .
+                0x000000000002b0cc                __exidx_start = .
 
-.ARM.exidx      0x000000000002ae34        0x8
+.ARM.exidx      0x000000000002b0cc        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x000000000002ae34        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
-                0x000000000002ae3c                __exidx_end = .
-                0x000000000002ae3c                __etext = .
+ .ARM.exidx     0x000000000002b0cc        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+                0x000000000002b0d4                __exidx_end = .
+                0x000000000002b0d4                __etext = .
 
-.rel.dyn        0x000000000002ae3c        0x0
- .rel.iplt      0x000000000002ae3c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+.rel.dyn        0x000000000002b0d4        0x0
+ .rel.iplt      0x000000000002b0d4        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
 
-.data           0x0000000020002180       0xb0 load address 0x000000000002ae3c
+.data           0x0000000020002180       0xac load address 0x000000000002b0d4
                 0x0000000020002180                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -6937,46 +6951,43 @@ Linker script and memory map
                 0x0000000020002180                m_uart
  .data.uart_log_backend
                 0x0000000020002188        0xc _build/nrf52832_xxaa/nrf_log_default_backends.c.o
- .data.buttons.10588
-                0x0000000020002194       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
  .data.game_time
-                0x00000000200021b4        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
-                0x00000000200021b4                game_time
- *fill*         0x00000000200021b5        0x1 
+                0x0000000020002194        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002194                game_time
+ *fill*         0x0000000020002195        0x1 
  .data.m_conn_handle
-                0x00000000200021b6        0x2 _build/nrf52832_xxaa/come_on_ble.c.o
- .data.walk     0x00000000200021b8        0x1 _build/nrf52832_xxaa/come_on_game.c.o
-                0x00000000200021b8                walk
- *fill*         0x00000000200021b9        0x3 
+                0x0000000020002196        0x2 _build/nrf52832_xxaa/come_on_ble.c.o
+ .data.buttons.10608
+                0x0000000020002198       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
  .data.SystemCoreClock
-                0x00000000200021bc        0x4 _build/nrf52832_xxaa/system_nrf52.c.o
-                0x00000000200021bc                SystemCoreClock
+                0x00000000200021b8        0x4 _build/nrf52832_xxaa/system_nrf52.c.o
+                0x00000000200021b8                SystemCoreClock
  .data.__ctype_ptr__
-                0x00000000200021c0        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
-                0x00000000200021c0                __ctype_ptr__
+                0x00000000200021bc        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+                0x00000000200021bc                __ctype_ptr__
  .data.impure_data
-                0x00000000200021c4       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
-                0x0000000020002224                . = ALIGN (0x4)
-                0x0000000020002224                PROVIDE (__preinit_array_start, .)
+                0x00000000200021c0       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+                0x0000000020002220                . = ALIGN (0x4)
+                0x0000000020002220                PROVIDE (__preinit_array_start, .)
  *(.preinit_array)
-                0x0000000020002224                PROVIDE (__preinit_array_end, .)
-                0x0000000020002224                . = ALIGN (0x4)
-                0x0000000020002224                PROVIDE (__init_array_start, .)
+                0x0000000020002220                PROVIDE (__preinit_array_end, .)
+                0x0000000020002220                . = ALIGN (0x4)
+                0x0000000020002220                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x0000000020002224        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
-                0x0000000020002228                PROVIDE (__init_array_end, .)
-                0x0000000020002228                . = ALIGN (0x4)
-                0x0000000020002228                PROVIDE (__fini_array_start, .)
+ .init_array    0x0000000020002220        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+                0x0000000020002224                PROVIDE (__init_array_end, .)
+                0x0000000020002224                . = ALIGN (0x4)
+                0x0000000020002224                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array)
- .fini_array    0x0000000020002228        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
-                0x000000002000222c                PROVIDE (__fini_array_end, .)
+ .fini_array    0x0000000020002224        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+                0x0000000020002228                PROVIDE (__fini_array_end, .)
  *(.jcr*)
- .jcr           0x000000002000222c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
- .jcr           0x000000002000222c        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
-                0x0000000020002230                . = ALIGN (0x4)
-                0x0000000020002230                __data_end__ = .
+ .jcr           0x0000000020002228        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+ .jcr           0x0000000020002228        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
+                0x000000002000222c                . = ALIGN (0x4)
+                0x000000002000222c                __data_end__ = .
 LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crti.o
 LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
 LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
@@ -7052,211 +7063,211 @@ LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/li
 END GROUP
 
 .tm_clone_table
-                0x0000000020002230        0x0 load address 0x000000000002aeec
+                0x000000002000222c        0x0 load address 0x000000000002b180
  .tm_clone_table
-                0x0000000020002230        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+                0x000000002000222c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
  .tm_clone_table
-                0x0000000020002230        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
+                0x000000002000222c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
 
-.igot.plt       0x0000000020002230        0x0 load address 0x000000000002aeec
- .igot.plt      0x0000000020002230        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
-                0x0000000020002230                . = ALIGN (0x4)
+.igot.plt       0x000000002000222c        0x0 load address 0x000000000002b180
+ .igot.plt      0x000000002000222c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+                0x000000002000222c                . = ALIGN (0x4)
 
 .mem_section_dummy_ram
 
 .log_dynamic_data
-                0x0000000020002230       0x90 load address 0x000000000002aeec
-                0x0000000020002230                PROVIDE (__start_log_dynamic_data, .)
+                0x000000002000222c       0x90 load address 0x000000000002b180
+                0x000000002000222c                PROVIDE (__start_log_dynamic_data, .)
  *(SORT(.log_dynamic_data*))
  .log_dynamic_data_app
-                0x0000000020002230        0xc _build/nrf52832_xxaa/nrf_log_frontend.c.o
-                0x0000000020002230                m_nrf_log_app_logs_data_dynamic
+                0x000000002000222c        0xc _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x000000002000222c                m_nrf_log_app_logs_data_dynamic
  .log_dynamic_data_balloc
-                0x000000002000223c        0xc _build/nrf52832_xxaa/nrf_balloc.c.o
-                0x000000002000223c                m_nrf_log_balloc_logs_data_dynamic
+                0x0000000020002238        0xc _build/nrf52832_xxaa/nrf_balloc.c.o
+                0x0000000020002238                m_nrf_log_balloc_logs_data_dynamic
  .log_dynamic_data_ble_gatt
-                0x0000000020002248        0xc _build/nrf52832_xxaa/nrf_ble_gatt.c.o
-                0x0000000020002248                m_nrf_log_ble_gatt_logs_data_dynamic
+                0x0000000020002244        0xc _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000020002244                m_nrf_log_ble_gatt_logs_data_dynamic
  .log_dynamic_data_clock
-                0x0000000020002254        0xc _build/nrf52832_xxaa/nrf_drv_clock.c.o
-                0x0000000020002254                m_nrf_log_clock_logs_data_dynamic
+                0x0000000020002250        0xc _build/nrf52832_xxaa/nrf_drv_clock.c.o
+                0x0000000020002250                m_nrf_log_clock_logs_data_dynamic
  .log_dynamic_data_gpiote
-                0x0000000020002260        0xc _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
-                0x0000000020002260                m_nrf_log_gpiote_logs_data_dynamic
+                0x000000002000225c        0xc _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
+                0x000000002000225c                m_nrf_log_gpiote_logs_data_dynamic
  .log_dynamic_data_nrf_sdh
-                0x000000002000226c        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
-                0x000000002000226c                m_nrf_log_nrf_sdh_logs_data_dynamic
+                0x0000000020002268        0xc _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000020002268                m_nrf_log_nrf_sdh_logs_data_dynamic
  .log_dynamic_data_nrf_sdh_ble
-                0x0000000020002278        0xc _build/nrf52832_xxaa/nrf_sdh_ble.c.o
-                0x0000000020002278                m_nrf_log_nrf_sdh_ble_logs_data_dynamic
+                0x0000000020002274        0xc _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x0000000020002274                m_nrf_log_nrf_sdh_ble_logs_data_dynamic
  .log_dynamic_data_nrf_sdh_soc
-                0x0000000020002284        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
-                0x0000000020002284                m_nrf_log_nrf_sdh_soc_logs_data_dynamic
+                0x0000000020002280        0xc _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x0000000020002280                m_nrf_log_nrf_sdh_soc_logs_data_dynamic
  .log_dynamic_data_pwr_mgmt
-                0x0000000020002290        0xc _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
-                0x0000000020002290                m_nrf_log_pwr_mgmt_logs_data_dynamic
+                0x000000002000228c        0xc _build/nrf52832_xxaa/nrf_pwr_mgmt.c.o
+                0x000000002000228c                m_nrf_log_pwr_mgmt_logs_data_dynamic
  .log_dynamic_data_spi
-                0x000000002000229c        0xc _build/nrf52832_xxaa/nrf_drv_spi.c.o
-                0x000000002000229c                m_nrf_log_spi_logs_data_dynamic
+                0x0000000020002298        0xc _build/nrf52832_xxaa/nrf_drv_spi.c.o
+                0x0000000020002298                m_nrf_log_spi_logs_data_dynamic
  .log_dynamic_data_timer
-                0x00000000200022a8        0xc _build/nrf52832_xxaa/nrf_drv_timer.c.o
-                0x00000000200022a8                m_nrf_log_timer_logs_data_dynamic
+                0x00000000200022a4        0xc _build/nrf52832_xxaa/nrf_drv_timer.c.o
+                0x00000000200022a4                m_nrf_log_timer_logs_data_dynamic
  .log_dynamic_data_uart
-                0x00000000200022b4        0xc _build/nrf52832_xxaa/nrf_drv_uart.c.o
-                0x00000000200022b4                m_nrf_log_uart_logs_data_dynamic
+                0x00000000200022b0        0xc _build/nrf52832_xxaa/nrf_drv_uart.c.o
+                0x00000000200022b0                m_nrf_log_uart_logs_data_dynamic
                 [!provide]                        PROVIDE (__stop_log_dynamic_data, .)
 
 .cli_sorted_cmd_ptrs
-                0x00000000200022c0        0x0
+                0x00000000200022bc        0x0
                 [!provide]                        PROVIDE (__start_cli_sorted_cmd_ptrs, .)
  *(.cli_sorted_cmd_ptrs)
                 [!provide]                        PROVIDE (__stop_cli_sorted_cmd_ptrs, .)
 
-.fs_data        0x00000000200022c0        0x0
+.fs_data        0x00000000200022bc        0x0
                 [!provide]                        PROVIDE (__start_fs_data, .)
  *(.fs_data)
                 [!provide]                        PROVIDE (__stop_fs_data, .)
 
-.bss            0x00000000200022c0      0xa74 load address 0x000000000002af7c
-                0x00000000200022c0                . = ALIGN (0x4)
-                0x00000000200022c0                __bss_start__ = .
+.bss            0x00000000200022bc      0xa80 load address 0x000000000002b210
+                0x00000000200022bc                . = ALIGN (0x4)
+                0x00000000200022bc                __bss_start__ = .
  *(.bss*)
- .bss           0x00000000200022c0       0x1c /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
+ .bss           0x00000000200022bc       0x1c /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtbegin.o
  .bss.m_xfer_done
-                0x00000000200022dc        0x1 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
+                0x00000000200022d8        0x1 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .bss.m_async_mode
-                0x00000000200022dd        0x1 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
- *fill*         0x00000000200022de        0x2 
+                0x00000000200022d9        0x1 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
+ *fill*         0x00000000200022da        0x2 
  .bss.m_string_buff
-                0x00000000200022e0       0x40 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
+                0x00000000200022dc       0x40 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .bss.m_log_data
-                0x0000000020002320      0x420 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x000000002000231c      0x420 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .bss.mempool_nrf_balloc_cb
-                0x0000000020002740        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x000000002000273c        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .bss.mempool_nrf_balloc_pool_stack
-                0x0000000020002748        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x0000000020002744        0x8 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .bss.mempool_nrf_balloc_pool_mem
-                0x0000000020002750       0xc0 _build/nrf52832_xxaa/nrf_log_frontend.c.o
+                0x000000002000274c       0xc0 _build/nrf52832_xxaa/nrf_log_frontend.c.o
  .bss.m_detection_delay
-                0x0000000020002810        0x4 _build/nrf52832_xxaa/app_button.c.o
+                0x000000002000280c        0x4 _build/nrf52832_xxaa/app_button.c.o
  .bss.mp_buttons
-                0x0000000020002814        0x4 _build/nrf52832_xxaa/app_button.c.o
+                0x0000000020002810        0x4 _build/nrf52832_xxaa/app_button.c.o
  .bss.m_button_count
-                0x0000000020002818        0x1 _build/nrf52832_xxaa/app_button.c.o
- *fill*         0x0000000020002819        0x3 
+                0x0000000020002814        0x1 _build/nrf52832_xxaa/app_button.c.o
+ *fill*         0x0000000020002815        0x3 
  .bss.m_detection_delay_timer_id_data
-                0x000000002000281c       0x20 _build/nrf52832_xxaa/app_button.c.o
+                0x0000000020002818       0x20 _build/nrf52832_xxaa/app_button.c.o
  .bss.m_pin_state
-                0x000000002000283c        0x4 _build/nrf52832_xxaa/app_button.c.o
+                0x0000000020002838        0x4 _build/nrf52832_xxaa/app_button.c.o
  .bss.m_pin_transition
-                0x0000000020002840        0x4 _build/nrf52832_xxaa/app_button.c.o
+                0x000000002000283c        0x4 _build/nrf52832_xxaa/app_button.c.o
  .bss.m_queue_event_headers
-                0x0000000020002844        0x4 _build/nrf52832_xxaa/app_scheduler.c.o
+                0x0000000020002840        0x4 _build/nrf52832_xxaa/app_scheduler.c.o
  .bss.m_queue_event_data
-                0x0000000020002848        0x4 _build/nrf52832_xxaa/app_scheduler.c.o
+                0x0000000020002844        0x4 _build/nrf52832_xxaa/app_scheduler.c.o
  .bss.m_queue_event_size
-                0x000000002000284c        0x2 _build/nrf52832_xxaa/app_scheduler.c.o
+                0x0000000020002848        0x2 _build/nrf52832_xxaa/app_scheduler.c.o
  .bss.m_queue_start_index
-                0x000000002000284e        0x1 _build/nrf52832_xxaa/app_scheduler.c.o
+                0x000000002000284a        0x1 _build/nrf52832_xxaa/app_scheduler.c.o
  .bss.m_queue_end_index
-                0x000000002000284f        0x1 _build/nrf52832_xxaa/app_scheduler.c.o
+                0x000000002000284b        0x1 _build/nrf52832_xxaa/app_scheduler.c.o
  .bss.m_queue_size
-                0x0000000020002850        0x2 _build/nrf52832_xxaa/app_scheduler.c.o
- *fill*         0x0000000020002852        0x2 
+                0x000000002000284c        0x2 _build/nrf52832_xxaa/app_scheduler.c.o
+ *fill*         0x000000002000284e        0x2 
  .bss.m_ticks_latest
-                0x0000000020002854        0x4 _build/nrf52832_xxaa/app_timer.c.o
+                0x0000000020002850        0x4 _build/nrf52832_xxaa/app_timer.c.o
  .bss.mp_timer_id_head
-                0x0000000020002858        0x4 _build/nrf52832_xxaa/app_timer.c.o
+                0x0000000020002854        0x4 _build/nrf52832_xxaa/app_timer.c.o
  .bss.m_ticks_elapsed_q_read_ind
-                0x000000002000285c        0x1 _build/nrf52832_xxaa/app_timer.c.o
+                0x0000000020002858        0x1 _build/nrf52832_xxaa/app_timer.c.o
  .bss.m_ticks_elapsed_q_write_ind
-                0x000000002000285d        0x1 _build/nrf52832_xxaa/app_timer.c.o
+                0x0000000020002859        0x1 _build/nrf52832_xxaa/app_timer.c.o
  .bss.m_rtc1_reset
-                0x000000002000285e        0x1 _build/nrf52832_xxaa/app_timer.c.o
- *fill*         0x000000002000285f        0x1 
+                0x000000002000285a        0x1 _build/nrf52832_xxaa/app_timer.c.o
+ *fill*         0x000000002000285b        0x1 
  .bss.m_op_queue
-                0x0000000020002860      0x10c _build/nrf52832_xxaa/app_timer.c.o
+                0x000000002000285c      0x10c _build/nrf52832_xxaa/app_timer.c.o
  .bss.m_ticks_elapsed
-                0x000000002000296c        0x8 _build/nrf52832_xxaa/app_timer.c.o
+                0x0000000020002968        0x8 _build/nrf52832_xxaa/app_timer.c.o
  .bss.m_rtc1_running
-                0x0000000020002974        0x1 _build/nrf52832_xxaa/app_timer.c.o
- *fill*         0x0000000020002975        0x3 
+                0x0000000020002970        0x1 _build/nrf52832_xxaa/app_timer.c.o
+ *fill*         0x0000000020002971        0x3 
  .bss.m_clock_cb
-                0x0000000020002978       0x14 _build/nrf52832_xxaa/nrf_drv_clock.c.o
- .bss.m_cb      0x000000002000298c       0x58 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
- .bss.m_cb      0x00000000200029e4       0x48 _build/nrf52832_xxaa/nrf_drv_spi.c.o
- .bss.m_cb      0x0000000020002a2c       0x20 _build/nrf52832_xxaa/nrf_drv_uart.c.o
- .bss.m_cb      0x0000000020002a4c        0xc _build/nrf52832_xxaa/nrf_drv_timer.c.o
- .bss.j         0x0000000020002a58        0x4 _build/nrf52832_xxaa/come_on_spi.c.o
+                0x0000000020002974       0x14 _build/nrf52832_xxaa/nrf_drv_clock.c.o
+ .bss.m_cb      0x0000000020002988       0x58 _build/nrf52832_xxaa/nrf_drv_gpiote.c.o
+ .bss.m_cb      0x00000000200029e0       0x48 _build/nrf52832_xxaa/nrf_drv_spi.c.o
+ .bss.m_cb      0x0000000020002a28       0x20 _build/nrf52832_xxaa/nrf_drv_uart.c.o
+ .bss.m_cb      0x0000000020002a48        0xc _build/nrf52832_xxaa/nrf_drv_timer.c.o
+ .bss.j         0x0000000020002a54        0x4 _build/nrf52832_xxaa/come_on_spi.c.o
  .bss.st7586_spi_xfer_done
-                0x0000000020002a5c        0x1 _build/nrf52832_xxaa/come_on_spi.c.o
- .bss.rx_data   0x0000000020002a5d        0x1 _build/nrf52832_xxaa/come_on_spi.c.o
- *fill*         0x0000000020002a5e        0x2 
- .bss.i         0x0000000020002a60        0x4 _build/nrf52832_xxaa/come_on_spi.c.o
- .bss.p2_time   0x0000000020002a64        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
-                0x0000000020002a64                p2_time
- .bss.p1_time   0x0000000020002a65        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
-                0x0000000020002a65                p1_time
- *fill*         0x0000000020002a66        0x2 
- .bss.APP_SCHED_BUF.10697
-                0x0000000020002a68       0x84 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002a58        0x1 _build/nrf52832_xxaa/come_on_spi.c.o
+ .bss.rx_data   0x0000000020002a59        0x1 _build/nrf52832_xxaa/come_on_spi.c.o
+ *fill*         0x0000000020002a5a        0x2 
+ .bss.i         0x0000000020002a5c        0x4 _build/nrf52832_xxaa/come_on_spi.c.o
+ .bss.p2_time   0x0000000020002a60        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002a60                p2_time
+ .bss.p1_time   0x0000000020002a61        0x1 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002a61                p1_time
+ *fill*         0x0000000020002a62        0x2 
  .bss.m_p2_timer_id_data
-                0x0000000020002aec       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002a64       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
+ .bss.APP_SCHED_BUF.10717
+                0x0000000020002a84       0x84 _build/nrf52832_xxaa/come_on_ble.c.o
  .bss.m_p1_timer_id_data
-                0x0000000020002b0c       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
- .bss.m_gatt    0x0000000020002b2c       0x14 _build/nrf52832_xxaa/come_on_ble.c.o
+                0x0000000020002b08       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
+ .bss.m_gatt    0x0000000020002b28       0x14 _build/nrf52832_xxaa/come_on_ble.c.o
  .bss.m_game_timer_id_data
-                0x0000000020002b40       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
- .bss.m_lbs     0x0000000020002b60       0x18 _build/nrf52832_xxaa/come_on_ble.c.o
- .bss.i         0x0000000020002b78        0x4 _build/nrf52832_xxaa/come_on_draw.c.o
- .bss.j         0x0000000020002b7c        0x4 _build/nrf52832_xxaa/come_on_draw.c.o
- .bss.x         0x0000000020002b80        0x4 _build/nrf52832_xxaa/come_on_game.c.o
-                0x0000000020002b80                x
+                0x0000000020002b3c       0x20 _build/nrf52832_xxaa/come_on_ble.c.o
+ .bss.m_lbs     0x0000000020002b5c       0x18 _build/nrf52832_xxaa/come_on_ble.c.o
+ .bss.i         0x0000000020002b74        0x4 _build/nrf52832_xxaa/come_on_draw.c.o
+ .bss.j         0x0000000020002b78        0x4 _build/nrf52832_xxaa/come_on_draw.c.o
  .bss.m_conn_params_config
-                0x0000000020002b84       0x1c _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000020002b7c       0x1c _build/nrf52832_xxaa/ble_conn_params.c.o
  .bss.m_conn_params_instances
-                0x0000000020002ba0       0x14 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000020002b98       0x14 _build/nrf52832_xxaa/ble_conn_params.c.o
  .bss.m_timer_data
-                0x0000000020002bb4       0x20 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000020002bac       0x20 _build/nrf52832_xxaa/ble_conn_params.c.o
  .bss.m_preferred_conn_params
-                0x0000000020002bd4        0x8 _build/nrf52832_xxaa/ble_conn_params.c.o
- .bss.m_bcs     0x0000000020002bdc       0xb8 _build/nrf52832_xxaa/ble_conn_state.c.o
+                0x0000000020002bcc        0x8 _build/nrf52832_xxaa/ble_conn_params.c.o
+ .bss.m_bcs     0x0000000020002bd4       0xb8 _build/nrf52832_xxaa/ble_conn_state.c.o
  .bss.m_nrf_sdh_enabled
-                0x0000000020002c94        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000020002c8c        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
  .bss.m_nrf_sdh_continue
-                0x0000000020002c95        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000020002c8d        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
  .bss.m_nrf_sdh_suspended
-                0x0000000020002c96        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
- *fill*         0x0000000020002c97        0x1 
+                0x0000000020002c8e        0x1 _build/nrf52832_xxaa/nrf_sdh.c.o
+ *fill*         0x0000000020002c8f        0x1 
  .bss._global_atexit0
-                0x0000000020002c98       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+                0x0000000020002c90       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
  .bss._global_atexit
-                0x0000000020002d24        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
-                0x0000000020002d24                _global_atexit
+                0x0000000020002d1c        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000020002d1c                _global_atexit
  *(COMMON)
- COMMON         0x0000000020002d28        0xc _build/nrf52832_xxaa/app_util_platform.c.o
-                0x0000000020002d28                nrf_nvic_state
-                0x0000000020002d34                . = ALIGN (0x4)
-                0x0000000020002d34                __bss_end__ = .
+ COMMON         0x0000000020002d20        0xc _build/nrf52832_xxaa/app_util_platform.c.o
+                0x0000000020002d20                nrf_nvic_state
+ COMMON         0x0000000020002d2c       0x10 _build/nrf52832_xxaa/come_on_game.c.o
+                0x0000000020002d2c                player
+                0x0000000020002d3c                . = ALIGN (0x4)
+                0x0000000020002d3c                __bss_end__ = .
 
-.heap           0x0000000020002d38     0x2000
-                0x0000000020002d38                __HeapBase = .
-                0x0000000020002d38                __end__ = .
+.heap           0x0000000020002d40     0x2000
+                0x0000000020002d40                __HeapBase = .
+                0x0000000020002d40                __end__ = .
                 [!provide]                        PROVIDE (end, .)
  *(.heap*)
- .heap          0x0000000020002d38     0x2000 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
-                0x0000000020004d38                __HeapLimit = .
+ .heap          0x0000000020002d40     0x2000 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+                0x0000000020004d40                __HeapLimit = .
 
-.stack_dummy    0x0000000020002d38     0x2000
+.stack_dummy    0x0000000020002d40     0x2000
  *(.stack*)
- .stack         0x0000000020002d38     0x2000 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+ .stack         0x0000000020002d40     0x2000 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
                 0x0000000020010000                __StackTop = (ORIGIN (RAM) + LENGTH (RAM))
                 0x000000002000e000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x0000000020010000                PROVIDE (__stack, __StackTop)
                 0x0000000000000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
-                0x0000000000000140                DataInitFlashUsed = (__bss_start__ - __data_start__)
-                0x0000000000007e3c                CodeFlashUsed = (__etext - ORIGIN (FLASH))
-                0x0000000000007f7c                TotalFlashUsed = (CodeFlashUsed + DataInitFlashUsed)
+                0x000000000000013c                DataInitFlashUsed = (__bss_start__ - __data_start__)
+                0x00000000000080d4                CodeFlashUsed = (__etext - ORIGIN (FLASH))
+                0x0000000000008210                TotalFlashUsed = (CodeFlashUsed + DataInitFlashUsed)
                 0x0000000000000001                ASSERT ((TotalFlashUsed <= LENGTH (FLASH)), region FLASH overflowed with .data and user data)
 OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
 
@@ -7440,7 +7451,7 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .comment       0x0000000000000070       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
  .comment       0x0000000000000070       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/armv7e-m/fpu/crtend.o
 
-.debug_line     0x0000000000000000    0x153d6
+.debug_line     0x0000000000000000    0x154b2
  .debug_line    0x0000000000000000       0x7e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
  .debug_line    0x000000000000007e      0x681 _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_line    0x00000000000006ff      0x732 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
@@ -7470,34 +7481,34 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_line    0x000000000000bb21      0xa4c _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_line    0x000000000000c56d      0xac7 _build/nrf52832_xxaa/main.c.o
  .debug_line    0x000000000000d034      0xca1 _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_line    0x000000000000dcd5      0xdad _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_line    0x000000000000ea82      0xdb3 _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_line    0x000000000000f835      0xadd _build/nrf52832_xxaa/come_on_game.c.o
- .debug_line    0x0000000000010312      0x887 _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_line    0x0000000000010b99      0x843 _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_line    0x00000000000113dc      0x73e _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_line    0x0000000000011b1a      0x672 _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_line    0x000000000001218c      0x71a _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_line    0x00000000000128a6       0x85 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
- .debug_line    0x000000000001292b      0x382 _build/nrf52832_xxaa/system_nrf52.c.o
- .debug_line    0x0000000000012cad      0x6d0 _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_line    0x000000000001337d      0x832 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_line    0x0000000000013baf      0x73e _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_line    0x00000000000142ed      0x5c9 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_line    0x00000000000148b6       0xc4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_line    0x000000000001497a       0x72 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
- .debug_line    0x00000000000149ec      0x16b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_line    0x0000000000014b57       0x9e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_line    0x0000000000014bf5       0xf4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
- .debug_line    0x0000000000014ce9       0xb9 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_line    0x0000000000014da2       0xf0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_line    0x0000000000014e92       0xf1 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_line    0x0000000000014f83       0xf8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_line    0x000000000001507b      0x178 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_line    0x00000000000151f3      0x183 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
- .debug_line    0x0000000000015376       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_line    0x000000000000dcd5      0xdea _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_line    0x000000000000eabf      0xe26 _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_line    0x000000000000f8e5      0xb09 _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_line    0x00000000000103ee      0x887 _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_line    0x0000000000010c75      0x843 _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_line    0x00000000000114b8      0x73e _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_line    0x0000000000011bf6      0x672 _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_line    0x0000000000012268      0x71a _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_line    0x0000000000012982       0x85 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+ .debug_line    0x0000000000012a07      0x382 _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_line    0x0000000000012d89      0x6d0 _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_line    0x0000000000013459      0x832 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_line    0x0000000000013c8b      0x73e _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_line    0x00000000000143c9      0x5c9 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_line    0x0000000000014992       0xc4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_line    0x0000000000014a56       0x72 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+ .debug_line    0x0000000000014ac8      0x16b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_line    0x0000000000014c33       0x9e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_line    0x0000000000014cd1       0xf4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+ .debug_line    0x0000000000014dc5       0xb9 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_line    0x0000000000014e7e       0xf0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_line    0x0000000000014f6e       0xf1 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_line    0x000000000001505f       0xf8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_line    0x0000000000015157      0x178 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_line    0x00000000000152cf      0x183 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_line    0x0000000000015452       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
 
-.debug_info     0x0000000000000000    0x337e1
+.debug_info     0x0000000000000000    0x33c58
  .debug_info    0x0000000000000000       0xb0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
  .debug_info    0x00000000000000b0      0x850 _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_info    0x0000000000000900      0xfd4 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
@@ -7527,34 +7538,34 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_info    0x0000000000018334     0x16b1 _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_info    0x00000000000199e5      0x328 _build/nrf52832_xxaa/main.c.o
  .debug_info    0x0000000000019d0d     0x1c37 _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_info    0x000000000001b944     0x3eed _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_info    0x000000000001f831     0x171f _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_info    0x0000000000020f50      0x3b0 _build/nrf52832_xxaa/come_on_game.c.o
- .debug_info    0x0000000000021300     0x1afd _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_info    0x0000000000022dfd     0x2677 _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_info    0x0000000000025474     0x2264 _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_info    0x00000000000276d8      0xd25 _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_info    0x00000000000283fd     0x24a0 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_info    0x000000000002a89d       0xb3 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
- .debug_info    0x000000000002a950     0x110f _build/nrf52832_xxaa/system_nrf52.c.o
- .debug_info    0x000000000002ba5f     0x2056 _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_info    0x000000000002dab5     0x16f7 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_info    0x000000000002f1ac     0x25f9 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_info    0x00000000000317a5      0x5de _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_info    0x0000000000031d83      0x10a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_info    0x0000000000031e8d       0x6f /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
- .debug_info    0x0000000000031efc      0x7a6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_info    0x00000000000326a2       0xef /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_info    0x0000000000032791      0x7d3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
- .debug_info    0x0000000000032f64      0x105 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_info    0x0000000000033069      0x104 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_info    0x000000000003316d       0xd3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_info    0x0000000000033240       0xcd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_info    0x000000000003330d      0x23b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_info    0x0000000000033548      0x241 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
- .debug_info    0x0000000000033789       0x58 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_info    0x000000000001b944     0x3e81 _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_info    0x000000000001f7c5     0x1ab3 _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_info    0x0000000000021278      0x4ff _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_info    0x0000000000021777     0x1afd _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_info    0x0000000000023274     0x2677 _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_info    0x00000000000258eb     0x2264 _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_info    0x0000000000027b4f      0xd25 _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_info    0x0000000000028874     0x24a0 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_info    0x000000000002ad14       0xb3 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+ .debug_info    0x000000000002adc7     0x110f _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_info    0x000000000002bed6     0x2056 _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_info    0x000000000002df2c     0x16f7 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_info    0x000000000002f623     0x25f9 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_info    0x0000000000031c1c      0x5de _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_info    0x00000000000321fa      0x10a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_info    0x0000000000032304       0x6f /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+ .debug_info    0x0000000000032373      0x7a6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_info    0x0000000000032b19       0xef /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_info    0x0000000000032c08      0x7d3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+ .debug_info    0x00000000000333db      0x105 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_info    0x00000000000334e0      0x104 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_info    0x00000000000335e4       0xd3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_info    0x00000000000336b7       0xcd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_info    0x0000000000033784      0x23b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_info    0x00000000000339bf      0x241 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_info    0x0000000000033c00       0x58 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
 
-.debug_abbrev   0x0000000000000000     0x7d9a
+.debug_abbrev   0x0000000000000000     0x7e1a
  .debug_abbrev  0x0000000000000000       0x14 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
  .debug_abbrev  0x0000000000000014      0x20e _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_abbrev  0x0000000000000222      0x2d2 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
@@ -7584,34 +7595,34 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_abbrev  0x00000000000041bc      0x39e _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_abbrev  0x000000000000455a      0x153 _build/nrf52832_xxaa/main.c.o
  .debug_abbrev  0x00000000000046ad      0x386 _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_abbrev  0x0000000000004a33      0x4df _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_abbrev  0x0000000000004f12      0x1c2 _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_abbrev  0x00000000000050d4      0x154 _build/nrf52832_xxaa/come_on_game.c.o
- .debug_abbrev  0x0000000000005228      0x37d _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_abbrev  0x00000000000055a5      0x470 _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_abbrev  0x0000000000005a15      0x407 _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_abbrev  0x0000000000005e1c      0x27f _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_abbrev  0x000000000000609b      0x3cf _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_abbrev  0x000000000000646a       0x14 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
- .debug_abbrev  0x000000000000647e      0x1d5 _build/nrf52832_xxaa/system_nrf52.c.o
- .debug_abbrev  0x0000000000006653      0x325 _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_abbrev  0x0000000000006978      0x446 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_abbrev  0x0000000000006dbe      0x3ad _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_abbrev  0x000000000000716b      0x1f1 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_abbrev  0x000000000000735c       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_abbrev  0x0000000000007414       0x4e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
- .debug_abbrev  0x0000000000007462      0x18b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_abbrev  0x00000000000075ed       0xbd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_abbrev  0x00000000000076aa      0x136 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
- .debug_abbrev  0x00000000000077e0       0xba /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_abbrev  0x000000000000789a       0xa4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_abbrev  0x000000000000793e       0x8e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_abbrev  0x00000000000079cc       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_abbrev  0x0000000000007a58      0x180 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_abbrev  0x0000000000007bd8      0x16d /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
- .debug_abbrev  0x0000000000007d45       0x55 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_abbrev  0x0000000000004a33      0x4dd _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_abbrev  0x0000000000004f10      0x1e9 _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_abbrev  0x00000000000050f9      0x1af _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_abbrev  0x00000000000052a8      0x37d _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_abbrev  0x0000000000005625      0x470 _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_abbrev  0x0000000000005a95      0x407 _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_abbrev  0x0000000000005e9c      0x27f _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_abbrev  0x000000000000611b      0x3cf _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_abbrev  0x00000000000064ea       0x14 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+ .debug_abbrev  0x00000000000064fe      0x1d5 _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_abbrev  0x00000000000066d3      0x325 _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_abbrev  0x00000000000069f8      0x446 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_abbrev  0x0000000000006e3e      0x3ad _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_abbrev  0x00000000000071eb      0x1f1 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_abbrev  0x00000000000073dc       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_abbrev  0x0000000000007494       0x4e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+ .debug_abbrev  0x00000000000074e2      0x18b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_abbrev  0x000000000000766d       0xbd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_abbrev  0x000000000000772a      0x136 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+ .debug_abbrev  0x0000000000007860       0xba /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_abbrev  0x000000000000791a       0xa4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_abbrev  0x00000000000079be       0x8e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_abbrev  0x0000000000007a4c       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_abbrev  0x0000000000007ad8      0x180 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_abbrev  0x0000000000007c58      0x16d /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_abbrev  0x0000000000007dc5       0x55 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
 
-.debug_aranges  0x0000000000000000      0xf48
+.debug_aranges  0x0000000000000000      0xf68
  .debug_aranges
                 0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
  .debug_aranges
@@ -7673,57 +7684,57 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_aranges
                 0x00000000000008b8       0xd8 _build/nrf52832_xxaa/come_on_ble.c.o
  .debug_aranges
-                0x0000000000000990       0x70 _build/nrf52832_xxaa/come_on_draw.c.o
+                0x0000000000000990       0x88 _build/nrf52832_xxaa/come_on_draw.c.o
  .debug_aranges
-                0x0000000000000a00       0x28 _build/nrf52832_xxaa/come_on_game.c.o
+                0x0000000000000a18       0x30 _build/nrf52832_xxaa/come_on_game.c.o
  .debug_aranges
-                0x0000000000000a28       0x60 _build/nrf52832_xxaa/ble_advdata.c.o
+                0x0000000000000a48       0x60 _build/nrf52832_xxaa/ble_advdata.c.o
  .debug_aranges
-                0x0000000000000a88       0x60 _build/nrf52832_xxaa/ble_conn_params.c.o
+                0x0000000000000aa8       0x60 _build/nrf52832_xxaa/ble_conn_params.c.o
  .debug_aranges
-                0x0000000000000ae8       0xb0 _build/nrf52832_xxaa/ble_conn_state.c.o
+                0x0000000000000b08       0xb0 _build/nrf52832_xxaa/ble_conn_state.c.o
  .debug_aranges
-                0x0000000000000b98       0x58 _build/nrf52832_xxaa/ble_srv_common.c.o
+                0x0000000000000bb8       0x58 _build/nrf52832_xxaa/ble_srv_common.c.o
  .debug_aranges
-                0x0000000000000bf0       0x68 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+                0x0000000000000c10       0x68 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
  .debug_aranges
-                0x0000000000000c58       0x20 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
+                0x0000000000000c78       0x20 _build/nrf52832_xxaa/gcc_startup_nrf52.S.o
  .debug_aranges
-                0x0000000000000c78       0x28 _build/nrf52832_xxaa/system_nrf52.c.o
+                0x0000000000000c98       0x28 _build/nrf52832_xxaa/system_nrf52.c.o
  .debug_aranges
-                0x0000000000000ca0       0x50 _build/nrf52832_xxaa/ble_lbs.c.o
+                0x0000000000000cc0       0x50 _build/nrf52832_xxaa/ble_lbs.c.o
  .debug_aranges
-                0x0000000000000cf0       0x70 _build/nrf52832_xxaa/nrf_sdh.c.o
+                0x0000000000000d10       0x70 _build/nrf52832_xxaa/nrf_sdh.c.o
  .debug_aranges
-                0x0000000000000d60       0x50 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+                0x0000000000000d80       0x50 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
  .debug_aranges
-                0x0000000000000db0       0x28 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+                0x0000000000000dd0       0x28 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
  .debug_aranges
-                0x0000000000000dd8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+                0x0000000000000df8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
  .debug_aranges
-                0x0000000000000df8       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+                0x0000000000000e18       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
  .debug_aranges
-                0x0000000000000e10       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+                0x0000000000000e30       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
  .debug_aranges
-                0x0000000000000e30       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+                0x0000000000000e50       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
  .debug_aranges
-                0x0000000000000e50       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+                0x0000000000000e70       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
  .debug_aranges
-                0x0000000000000e68       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+                0x0000000000000e88       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
  .debug_aranges
-                0x0000000000000e88       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+                0x0000000000000ea8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
  .debug_aranges
-                0x0000000000000ea8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+                0x0000000000000ec8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
  .debug_aranges
-                0x0000000000000ec8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+                0x0000000000000ee8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
  .debug_aranges
-                0x0000000000000ee8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+                0x0000000000000f08       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
  .debug_aranges
-                0x0000000000000f08       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000000000f28       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
  .debug_aranges
-                0x0000000000000f28       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+                0x0000000000000f48       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
 
-.debug_loc      0x0000000000000000    0x147eb
+.debug_loc      0x0000000000000000    0x147d1
  .debug_loc     0x0000000000000000      0x185 _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_loc     0x0000000000000185      0x12b _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .debug_loc     0x00000000000002b0       0x15 _build/nrf52832_xxaa/nrf_log_default_backends.c.o
@@ -7750,28 +7761,29 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_loc     0x000000000000ae7e     0x2bcc _build/nrf52832_xxaa/nrf_drv_uart.c.o
  .debug_loc     0x000000000000da4a      0x8f3 _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_loc     0x000000000000e33d      0x66f _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_loc     0x000000000000e9ac      0xe93 _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_loc     0x000000000000f83f      0x486 _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_loc     0x000000000000fcc5     0x19b3 _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_loc     0x0000000000011678      0xdca _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_loc     0x0000000000012442      0x52f _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_loc     0x0000000000012971      0x5ad _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_loc     0x0000000000012f1e      0xb60 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_loc     0x0000000000013a7e      0x2ff _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_loc     0x0000000000013d7d      0x272 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_loc     0x0000000000013fef      0x29f _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_loc     0x000000000001428e       0x74 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_loc     0x0000000000014302       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_loc     0x000000000001432e       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_loc     0x000000000001434c       0x3e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_loc     0x000000000001438a       0x54 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_loc     0x00000000000143de       0x87 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_loc     0x0000000000014465       0x57 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_loc     0x00000000000144bc       0x21 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_loc     0x00000000000144dd      0x1a2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_loc     0x000000000001467f      0x16c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_loc     0x000000000000e9ac      0xdcc _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_loc     0x000000000000f778      0x4d3 _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_loc     0x000000000000fc4b       0x60 _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_loc     0x000000000000fcab     0x19b3 _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_loc     0x000000000001165e      0xdca _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_loc     0x0000000000012428      0x52f _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_loc     0x0000000000012957      0x5ad _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_loc     0x0000000000012f04      0xb60 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_loc     0x0000000000013a64      0x2ff _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_loc     0x0000000000013d63      0x272 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_loc     0x0000000000013fd5      0x29f _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_loc     0x0000000000014274       0x74 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_loc     0x00000000000142e8       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_loc     0x0000000000014314       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_loc     0x0000000000014332       0x3e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_loc     0x0000000000014370       0x54 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_loc     0x00000000000143c4       0x87 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_loc     0x000000000001444b       0x57 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_loc     0x00000000000144a2       0x21 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_loc     0x00000000000144c3      0x1a2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_loc     0x0000000000014665      0x16c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
 
-.debug_ranges   0x0000000000000000     0x4540
+.debug_ranges   0x0000000000000000     0x4588
  .debug_ranges  0x0000000000000000       0x28 _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_ranges  0x0000000000000028       0x80 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .debug_ranges  0x00000000000000a8       0x10 _build/nrf52832_xxaa/nrf_log_default_backends.c.o
@@ -7800,29 +7812,29 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_ranges  0x0000000000003190      0x280 _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_ranges  0x0000000000003410       0x18 _build/nrf52832_xxaa/main.c.o
  .debug_ranges  0x0000000000003428      0x198 _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_ranges  0x00000000000035c0      0x1e8 _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_ranges  0x00000000000037a8       0x60 _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_ranges  0x0000000000003808       0x18 _build/nrf52832_xxaa/come_on_game.c.o
- .debug_ranges  0x0000000000003820      0x308 _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_ranges  0x0000000000003b28      0x228 _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_ranges  0x0000000000003d50      0x108 _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_ranges  0x0000000000003e58      0x160 _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_ranges  0x0000000000003fb8       0xe0 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_ranges  0x0000000000004098      0x148 _build/nrf52832_xxaa/system_nrf52.c.o
- .debug_ranges  0x00000000000041e0       0x60 _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_ranges  0x0000000000004240      0x1a8 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_ranges  0x00000000000043e8       0xa0 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_ranges  0x0000000000004488       0x18 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_ranges  0x00000000000044a0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_ranges  0x00000000000044b0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_ranges  0x00000000000044c0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_ranges  0x00000000000044d0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_ranges  0x00000000000044e0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_ranges  0x00000000000044f0       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_ranges  0x0000000000004500       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_ranges  0x0000000000004510       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_ranges  0x0000000000004520       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
- .debug_ranges  0x0000000000004530       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_ranges  0x00000000000035c0      0x210 _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_ranges  0x00000000000037d0       0x78 _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_ranges  0x0000000000003848       0x20 _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_ranges  0x0000000000003868      0x308 _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_ranges  0x0000000000003b70      0x228 _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_ranges  0x0000000000003d98      0x108 _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_ranges  0x0000000000003ea0      0x160 _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_ranges  0x0000000000004000       0xe0 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_ranges  0x00000000000040e0      0x148 _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_ranges  0x0000000000004228       0x60 _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_ranges  0x0000000000004288      0x1a8 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_ranges  0x0000000000004430       0xa0 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_ranges  0x00000000000044d0       0x18 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_ranges  0x00000000000044e8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_ranges  0x00000000000044f8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_ranges  0x0000000000004508       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_ranges  0x0000000000004518       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_ranges  0x0000000000004528       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_ranges  0x0000000000004538       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_ranges  0x0000000000004548       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_ranges  0x0000000000004558       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_ranges  0x0000000000004568       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_ranges  0x0000000000004578       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
 
 .debug_macro    0x0000000000000000     0xbac5
  .debug_macro   0x0000000000000000      0x344 _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
@@ -7971,7 +7983,7 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_macro   0x000000000000b797      0x318 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
  .debug_macro   0x000000000000baaf       0x16 _build/nrf52832_xxaa/nrf_sdh_soc.c.o
 
-.debug_str      0x0000000000000000    0x8479c
+.debug_str      0x0000000000000000    0x84843
  .debug_str     0x0000000000000000    0x69e2b _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
                                       0x6abdc (size before relaxing)
  .debug_str     0x0000000000069e2b     0x154c _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
@@ -8028,58 +8040,58 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
                                       0x74b74 (size before relaxing)
  .debug_str     0x000000000007e91d      0x142 _build/nrf52832_xxaa/come_on_spi.c.o
                                       0x753fa (size before relaxing)
- .debug_str     0x000000000007ea5f     0x29d8 _build/nrf52832_xxaa/come_on_ble.c.o
-                                      0x7779c (size before relaxing)
- .debug_str     0x0000000000081437       0xa6 _build/nrf52832_xxaa/come_on_draw.c.o
-                                      0x7491d (size before relaxing)
- .debug_str     0x00000000000814dd       0x1a _build/nrf52832_xxaa/come_on_game.c.o
-                                      0x748a4 (size before relaxing)
- .debug_str     0x00000000000814f7      0x36a _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_str     0x000000000007ea5f     0x2a42 _build/nrf52832_xxaa/come_on_ble.c.o
+                                      0x77822 (size before relaxing)
+ .debug_str     0x00000000000814a1       0xd3 _build/nrf52832_xxaa/come_on_draw.c.o
+                                      0x749b6 (size before relaxing)
+ .debug_str     0x0000000000081574       0x2a _build/nrf52832_xxaa/come_on_game.c.o
+                                      0x74945 (size before relaxing)
+ .debug_str     0x000000000008159e      0x36a _build/nrf52832_xxaa/ble_advdata.c.o
                                       0x6d1b8 (size before relaxing)
- .debug_str     0x0000000000081861      0x34e _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_str     0x0000000000081908      0x34e _build/nrf52832_xxaa/ble_conn_params.c.o
                                       0x6fc7f (size before relaxing)
- .debug_str     0x0000000000081baf      0x730 _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_str     0x0000000000081c56      0x730 _build/nrf52832_xxaa/ble_conn_state.c.o
                                       0x6dd85 (size before relaxing)
- .debug_str     0x00000000000822df      0x46d _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_str     0x0000000000082386      0x46d _build/nrf52832_xxaa/ble_srv_common.c.o
                                       0x6d3ff (size before relaxing)
- .debug_str     0x000000000008274c      0x48d _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_str     0x00000000000827f3      0x48d _build/nrf52832_xxaa/nrf_ble_gatt.c.o
                                       0x6ef3d (size before relaxing)
- .debug_str     0x0000000000082bd9      0x255 _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_str     0x0000000000082c80      0x255 _build/nrf52832_xxaa/system_nrf52.c.o
                                       0x5b969 (size before relaxing)
- .debug_str     0x0000000000082e2e      0x109 _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_str     0x0000000000082ed5      0x109 _build/nrf52832_xxaa/ble_lbs.c.o
                                       0x6f028 (size before relaxing)
- .debug_str     0x0000000000082f37      0x521 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_str     0x0000000000082fde      0x521 _build/nrf52832_xxaa/nrf_sdh.c.o
                                       0x6bb4f (size before relaxing)
- .debug_str     0x0000000000083458      0x624 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_str     0x00000000000834ff      0x624 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
                                       0x6fe28 (size before relaxing)
- .debug_str     0x0000000000083a7c      0x17b _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_str     0x0000000000083b23      0x17b _build/nrf52832_xxaa/nrf_sdh_soc.c.o
                                       0x6abde (size before relaxing)
- .debug_str     0x0000000000083bf7      0x1c6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_str     0x0000000000083c9e      0x1c6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
                                         0x25f (size before relaxing)
- .debug_str     0x0000000000083dbd       0xa6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
+ .debug_str     0x0000000000083e64       0xa6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-ctype_.o)
                                         0x1a4 (size before relaxing)
- .debug_str     0x0000000000083e63      0x32a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_str     0x0000000000083f0a      0x32a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
                                         0x594 (size before relaxing)
- .debug_str     0x000000000008418d       0xd6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_str     0x0000000000084234       0xd6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
                                         0x257 (size before relaxing)
- .debug_str     0x0000000000084263       0xe9 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
+ .debug_str     0x000000000008430a       0xe9 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-impure.o)
                                         0x5ca (size before relaxing)
- .debug_str     0x000000000008434c       0x8d /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_str     0x00000000000843f3       0x8d /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
                                         0x281 (size before relaxing)
- .debug_str     0x00000000000843d9       0xaf /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_str     0x0000000000084480       0xaf /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
                                         0x236 (size before relaxing)
- .debug_str     0x0000000000084488       0x31 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_str     0x000000000008452f       0x31 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
                                         0x222 (size before relaxing)
- .debug_str     0x00000000000844b9       0xb5 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_str     0x0000000000084560       0xb5 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
                                         0x237 (size before relaxing)
- .debug_str     0x000000000008456e       0xb2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_str     0x0000000000084615       0xb2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
                                         0x305 (size before relaxing)
- .debug_str     0x0000000000084620       0x54 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_str     0x00000000000846c7       0x54 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
                                         0x2cb (size before relaxing)
- .debug_str     0x0000000000084674      0x128 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_str     0x000000000008471b      0x128 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
                                         0x12e (size before relaxing)
 
-.debug_frame    0x0000000000000000     0x25f8
+.debug_frame    0x0000000000000000     0x26ac
  .debug_frame   0x0000000000000000       0x3c _build/nrf52832_xxaa/nrf_log_backend_serial.c.o
  .debug_frame   0x000000000000003c       0xa4 _build/nrf52832_xxaa/nrf_log_backend_uart.c.o
  .debug_frame   0x00000000000000e0       0x28 _build/nrf52832_xxaa/nrf_log_default_backends.c.o
@@ -8108,26 +8120,26 @@ OUTPUT(_build/nrf52832_xxaa.out elf32-littlearm)
  .debug_frame   0x00000000000014fc      0x170 _build/nrf52832_xxaa/nrf_drv_timer.c.o
  .debug_frame   0x000000000000166c       0x38 _build/nrf52832_xxaa/main.c.o
  .debug_frame   0x00000000000016a4       0xb4 _build/nrf52832_xxaa/come_on_spi.c.o
- .debug_frame   0x0000000000001758      0x210 _build/nrf52832_xxaa/come_on_ble.c.o
- .debug_frame   0x0000000000001968      0x160 _build/nrf52832_xxaa/come_on_draw.c.o
- .debug_frame   0x0000000000001ac8       0x44 _build/nrf52832_xxaa/come_on_game.c.o
- .debug_frame   0x0000000000001b0c      0x128 _build/nrf52832_xxaa/ble_advdata.c.o
- .debug_frame   0x0000000000001c34      0x11c _build/nrf52832_xxaa/ble_conn_params.c.o
- .debug_frame   0x0000000000001d50      0x220 _build/nrf52832_xxaa/ble_conn_state.c.o
- .debug_frame   0x0000000000001f70       0xd0 _build/nrf52832_xxaa/ble_srv_common.c.o
- .debug_frame   0x0000000000002040       0xf4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
- .debug_frame   0x0000000000002134       0x48 _build/nrf52832_xxaa/system_nrf52.c.o
- .debug_frame   0x000000000000217c       0xbc _build/nrf52832_xxaa/ble_lbs.c.o
- .debug_frame   0x0000000000002238      0x120 _build/nrf52832_xxaa/nrf_sdh.c.o
- .debug_frame   0x0000000000002358       0xc4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
- .debug_frame   0x000000000000241c       0x3c _build/nrf52832_xxaa/nrf_sdh_soc.c.o
- .debug_frame   0x0000000000002458       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
- .debug_frame   0x0000000000002478       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
- .debug_frame   0x00000000000024a0       0x34 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
- .debug_frame   0x00000000000024d4       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
- .debug_frame   0x0000000000002500       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
- .debug_frame   0x0000000000002528       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
- .debug_frame   0x0000000000002548       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
- .debug_frame   0x0000000000002568       0x34 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
- .debug_frame   0x000000000000259c       0x3c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
- .debug_frame   0x00000000000025d8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
+ .debug_frame   0x0000000000001758      0x254 _build/nrf52832_xxaa/come_on_ble.c.o
+ .debug_frame   0x00000000000019ac      0x1ac _build/nrf52832_xxaa/come_on_draw.c.o
+ .debug_frame   0x0000000000001b58       0x68 _build/nrf52832_xxaa/come_on_game.c.o
+ .debug_frame   0x0000000000001bc0      0x128 _build/nrf52832_xxaa/ble_advdata.c.o
+ .debug_frame   0x0000000000001ce8      0x11c _build/nrf52832_xxaa/ble_conn_params.c.o
+ .debug_frame   0x0000000000001e04      0x220 _build/nrf52832_xxaa/ble_conn_state.c.o
+ .debug_frame   0x0000000000002024       0xd0 _build/nrf52832_xxaa/ble_srv_common.c.o
+ .debug_frame   0x00000000000020f4       0xf4 _build/nrf52832_xxaa/nrf_ble_gatt.c.o
+ .debug_frame   0x00000000000021e8       0x48 _build/nrf52832_xxaa/system_nrf52.c.o
+ .debug_frame   0x0000000000002230       0xbc _build/nrf52832_xxaa/ble_lbs.c.o
+ .debug_frame   0x00000000000022ec      0x120 _build/nrf52832_xxaa/nrf_sdh.c.o
+ .debug_frame   0x000000000000240c       0xc4 _build/nrf52832_xxaa/nrf_sdh_ble.c.o
+ .debug_frame   0x00000000000024d0       0x3c _build/nrf52832_xxaa/nrf_sdh_soc.c.o
+ .debug_frame   0x000000000000250c       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-atexit.o)
+ .debug_frame   0x000000000000252c       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-exit.o)
+ .debug_frame   0x0000000000002554       0x34 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-fini.o)
+ .debug_frame   0x0000000000002588       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00000000000025b4       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memcpy.o)
+ .debug_frame   0x00000000000025dc       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x00000000000025fc       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-strlen.o)
+ .debug_frame   0x000000000000261c       0x34 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__atexit.o)
+ .debug_frame   0x0000000000002650       0x3c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libc_nano.a(lib_a-__call_atexit.o)
+ .debug_frame   0x000000000000268c       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv7e-m/fpu/libnosys.a(_exit.o)
