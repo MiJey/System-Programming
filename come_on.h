@@ -45,6 +45,7 @@ typedef struct {
 	uint8_t y;
 	uint8_t t;
 	uint8_t hp;
+	uint8_t wins;
 	bool tag;
 	Status status;
 	Status newStatus;
@@ -73,6 +74,12 @@ void draw_hp(uint8_t pl, uint8_t hp);
 void draw_circle(uint8_t x1, uint8_t wl);
 void draw_ready();
 void draw_go();
+void draw_draw();
+void draw_ko();
+void draw_p1_win();
+void draw_p2_win();
+void draw_end();
+
 void draw_splash();
 void draw_clear();
 void draw_clear_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
@@ -81,12 +88,15 @@ void draw_time(uint8_t time);
 // ble
 void ble_start();
 void start_game_timer();
+void stop_game_timer();
 void start_player_timer(uint8_t p, uint8_t tick);
 void stop_player_timer(uint8_t p);
 
 // game
 void game_next_step(uint8_t num);
-void game_ready();
+void game_init();
+void game_finish_round();
+void game_end();
 void press_fn_button(uint8_t p);
 void press_up_button(uint8_t p);
 void press_left_button(uint8_t p);

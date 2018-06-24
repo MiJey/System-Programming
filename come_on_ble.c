@@ -51,11 +51,10 @@ uint8_t p2_time = 0;
 // 1초마다 줄어드는 게임 타이머
 static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 	draw_time(game_time);
-	if(game_time == 57) { draw_clear_rectangle(27, 119, 99, 100); }
-	if(game_time == 0) { 
-		// TODO 게임 종료
-		game_time = 10;
-	} else { game_time -= 1; }
+	if(game_time == 57) { draw_clear_rectangle(27, 119, 99, 100); }	// GO 지우기
+	
+	if(game_time == 0) { game_finish_round(); }	// 게임 종료
+	else { game_time -= 1; }
 	
 	bsp_board_led_invert(0);
 }
@@ -70,7 +69,10 @@ static void p1_timer_handler(void *p_context) { app_sched_event_put(&p1_time, si
 static void p2_timer_handler(void *p_context) { app_sched_event_put(&p2_time, sizeof(p2_time), p2_timer_scheduler); }
 
 // start timer
-void start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL); }
+void start_game_timer() { 
+	game_time = 59;
+	app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL);
+}
 void start_player_timer(uint8_t p, uint8_t tick) {
 	app_timer_start(p == 0 ? m_p1_timer_id : m_p2_timer_id, APP_TIMER_TICKS(tick), NULL);
 }
@@ -78,9 +80,8 @@ static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(10
 static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(100), NULL); }
 
 // stop timer
-void stop_player_timer(uint8_t p) {
-	app_timer_stop(p == 0 ? m_p1_timer_id : m_p2_timer_id);
-}
+void stop_game_timer() { app_timer_stop(m_game_timer_id); }
+void stop_player_timer(uint8_t p) { app_timer_stop(p == 0 ? m_p1_timer_id : m_p2_timer_id); }
 
 static void create_timers() {
 	app_timer_create(&m_game_timer_id, APP_TIMER_MODE_REPEATED, game_timer_handler); // 게임 시간(60초) 타이머
@@ -183,8 +184,8 @@ static void advertising_start(void) {
 //	bsp_board_led_on(ADVERTISING_LED);
 }
 
-static void game_ready_scheduler(void *p_event_data, uint16_t event_size) {
-	game_ready();
+static void game_init_scheduler(void *p_event_data, uint16_t event_size) {
+	game_init();
 }
 
 void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
@@ -199,7 +200,7 @@ void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 
 		err_code = app_button_enable();
 		APP_ERROR_CHECK(err_code);
-		app_sched_event_put(NULL, 0, game_ready_scheduler);	// 블루투스 연결되면 게임 레디
+		app_sched_event_put(NULL, 0, game_init_scheduler);	// 블루투스 연결되면 게임 레디
 		break;
 
 	case BLE_GAP_EVT_DISCONNECTED:
