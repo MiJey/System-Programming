@@ -64,7 +64,7 @@ void draw_ready_p(uint8_t x, uint8_t y, bool mirror);
 void draw_walk_a(uint8_t x, uint8_t y, bool mirror);
 void draw_walk_b(uint8_t x, uint8_t y, bool mirror);
 void draw_jump(uint8_t x, uint8_t y, bool mirror);
-void draw_defecse(uint8_t x, uint8_t y, bool mirror);
+void draw_defense(uint8_t x, uint8_t y, bool mirror);
 void draw_punch(uint8_t x, uint8_t y, bool mirror);
 void draw_kick(uint8_t x, uint8_t y, bool mirror);
 
@@ -79,8 +79,9 @@ void draw_time(uint8_t time);
 
 // ble
 void ble_start();
-void ble_start_game_timer();
-void stop_p1_timer();
+void start_game_timer();
+void start_player_timer(uint8_t p, uint8_t tick);
+void stop_player_timer(uint8_t p);
 
 // game
 void game_next_step(uint8_t num);

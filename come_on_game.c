@@ -2,36 +2,36 @@
 
 Player player[2];
 
-static int getWidth(Status status) {
-	switch(status) {
-	case READY: return 17;
-	case WALK: return 17;
-	case JUMP:
-	case DJUMP: return 29;
-	case DEFENSE: return 17;
-	case PUNCH: return 20;
-	case KICK: return 29;
-	} return -1;
-}
-
-static int getHeight(Status status) {
-	switch(status) {
-	case READY: return 39;
-	case WALK: return 39;
-	case JUMP:
-	case DJUMP: return 29;
-	case DEFENSE: return 35;
-	case PUNCH: return 39;
-	case KICK: return 39;
-	} return -1;
-}
-
 static void clear_previous(uint8_t p) {
+	int xOffset = 0;
+	int yOffset = 0;
+	int width = 0;
+	int height = 0;
+	
+	switch(player[p].status) {
+	case READY: width = 17; height = 39; break;
+	case WALK: width = 17; height = 39; break;
+	case JUMP:
+	case DJUMP: width = 29; height = 29; break;
+	case DEFENSE: width = 17; height = 35; break;
+	case PUNCH: width = 23; height = 35; 
+		if(player[p].direction == LEFT) {
+			xOffset = -6;
+		}
+		break;
+	case KICK: width = 29; height = 37;
+		if(player[p].direction == LEFT) {
+			xOffset = -12;
+			yOffset = 2;
+		}
+		break;
+	}
+
 	draw_clear_rectangle(
-		player[p].x,
-		player[p].y, 
-		player[p].x + getWidth(player[p].status),
-		player[p].y - getHeight(player[p].status));
+		player[p].x + xOffset,
+		player[p].y + yOffset, 
+		player[p].x + xOffset + width,
+		player[p].y + yOffset - height);
 }
 
 /**************************************************/
@@ -47,11 +47,15 @@ void game_next_step(uint8_t p) {
 		// 범위를 벗어났는지 체크
 		if(player[p].x < 0) { player[p].x = 0; }
 		if(player[p].x > 108) { player[p].x = 108; }
-		if(player[p].y != 39) { player[p].y = 39; }
+		player[p].y = 39;
+		
+		stop_player_timer(p);	// 동작 그만
 		draw_ready_p(player[p].x, player[p].y, player[p].direction == LEFT);
 		break;
 		
 	case WALK:
+		player[p].y = 39;
+		
 		if(player[p].direction == LEFT) {
 			// 왼쪽으로 걷기, 미러모드 true
 			if(player[p].x > 0) { player[p].x -= 3; }
@@ -71,6 +75,9 @@ void game_next_step(uint8_t p) {
 		if(player[p].direction == LEFT) { if(player[p].x > 0) { player[p].x -= 3; } }
 		else { if(player[p].x < 108) { player[p].x += 3; } }
 	case JUMP: {
+		if(player[p].x > 96) { player[p].x = 96; }	// 오른쪽 벽에 붙어서 점프하면 밀려나도록
+		player[p].y = 37;
+		
 		// 점프 동작 수행
 		uint8_t v = 20;	              // 속도
 		uint8_t g = 3;	              // 중력 가속도
@@ -80,8 +87,8 @@ void game_next_step(uint8_t p) {
 	
 		if(y < y0) {
 			player[p].t = 0;
-			player[p].newStatus = READY;
-			stop_p1_timer();      // 동작 그만
+			if(player[p].status == DJUMP) { player[p].newStatus = WALK; }
+			else { player[p].newStatus = READY; }
 		} else {
 			player[p].y = y;
 			player[p].t += 1;
@@ -89,9 +96,41 @@ void game_next_step(uint8_t p) {
 		}
 		break; }
 		
-	case DEFENSE: break;
-	case PUNCH: break;
-	case KICK: break;
+	case DEFENSE:
+		player[p].y = 35;
+		draw_defense(player[p].x, player[p].y, player[p].direction == LEFT);
+		break;
+		
+	case PUNCH:
+		player[p].y = 35;
+		
+		if(player[p].x > 102) { player[p].x = 102; }	// 오른쪽 벽을 치면 밀려나도록
+		if(player[p].direction == LEFT) {
+			if(player[p].x < 6) { player[p].x = 0; }	// 왼쪽 벽을 치면 밀려나도록
+			else { player[p].x -= 6; }
+		}
+		
+		draw_punch(player[p].x, player[p].y, player[p].direction == LEFT);
+		if(player[p].direction == LEFT) { player[p].x += 6; }
+		
+		player[p].newStatus = DEFENSE;
+		break;
+		
+	case KICK:
+		player[p].y = 37;
+		
+		if(player[p].x > 96) { player[p].x = 96; }	// 오른쪽 벽을 차면 밀려나도록
+		if(player[p].direction == LEFT) {
+			if(player[p].x < 12) { player[p].x = 0; }	// 왼쪽 벽을 차면 밀려나도록
+			else { player[p].x -= 12; }
+		}
+		
+		draw_kick(player[p].x, player[p].y, player[p].direction == LEFT);
+		if(player[p].direction == LEFT) { player[p].x += 12; }
+		
+		player[p].newStatus = DEFENSE;
+		break;
+		break;
 	}
 }
 
@@ -130,5 +169,5 @@ void game_ready() {
 	nrf_delay_ms(3000);
 	draw_go();
 
-	ble_start_game_timer();
+	start_game_timer();
 }
