@@ -38,22 +38,16 @@
 
 /******************** 구조체 ********************/
 
-typedef enum {
-	READY = 1840,    // 0(준비)   18x40px
-	WALK = 11840,    // 1(걷기)   18x40px
-	DEFENSE = 21836, // 2(방어)   18x36px
-	PUNCH = 32140,   // 3(주먹)   21x40px
-	KICK = 43040,    // 4(발차기) 30x40px
-	JUMP = 53030     // 5(점프)   30x30px
-} Status;
-// typedef enum { READY, WALK, DEFENSE, PUNCH, KICK, JUMP } Status;
-typedef enum { LEFT, NEUTRAL, RIGHT } Direction;
+typedef enum { READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK } Status;
+typedef enum { LEFT, RIGHT } Direction;
 typedef struct {
 	uint8_t x;
 	uint8_t y;
+	uint8_t t;
 	uint8_t hp;
 	bool tag;
 	Status status;
+	Status newStatus;
 	Direction direction;
 } Player;
 
@@ -66,24 +60,29 @@ void lcd_init();
 void st7586_write(const uint8_t category, const uint8_t data);
 
 // draw
-void draw_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
-void draw_ready_p(uint8_t x, uint8_t y);
-void draw_walk_a(uint8_t x, uint8_t y);
-void draw_walk_b(uint8_t x, uint8_t y);
-void draw_jump(uint8_t x, uint8_t y);
+void draw_ready_p(uint8_t x, uint8_t y, bool mirror);
+void draw_walk_a(uint8_t x, uint8_t y, bool mirror);
+void draw_walk_b(uint8_t x, uint8_t y, bool mirror);
+void draw_jump(uint8_t x, uint8_t y, bool mirror);
+void draw_defecse(uint8_t x, uint8_t y, bool mirror);
+void draw_punch(uint8_t x, uint8_t y, bool mirror);
+void draw_kick(uint8_t x, uint8_t y, bool mirror);
+
 void draw_hp(uint8_t pl, uint8_t hp);
 void draw_circle(uint8_t x1, uint8_t wl);
 void draw_ready();
 void draw_go();
 void draw_splash();
 void draw_clear();
-void draw_clear_previous(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
+void draw_clear_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void draw_time(uint8_t time);
 
 // ble
 void ble_start();
+void ble_start_game_timer();
+void stop_p1_timer();
 
 // game
-void move_player(uint8_t num);
-void stop_player(uint8_t num);
+void game_next_step(uint8_t num);
 void game_ready();
+

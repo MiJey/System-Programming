@@ -4,7 +4,6 @@ int main() {
 	lcd_init();
 
 	draw_splash();
-	draw_time(60);
 	ble_start();
 
 	// Enter main loop.

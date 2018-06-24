@@ -44,13 +44,14 @@ APP_TIMER_DEF(m_game_timer_id); // 게임 시간 타이머
 APP_TIMER_DEF(m_p1_timer_id); // P1 이동 타이머
 APP_TIMER_DEF(m_p2_timer_id); // P2 이동 타이머
 
-uint8_t game_time = 10;
+uint8_t game_time = 59;
 uint8_t p1_time = 0;
 uint8_t p2_time = 0;
 
 // 1초마다 줄어드는 게임 타이머
 static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 	draw_time(game_time);
+	if(game_time == 57) { draw_clear_rectangle(27, 119, 99, 100); }
 	if(game_time == 0) { 
 		// TODO 게임 종료
 		game_time = 10;
@@ -60,8 +61,8 @@ static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 }
 
 // 플레이어가 움직이는 타이머
-static void p1_timer_scheduler(void *p_event_data, uint16_t event_size) { move_player(0); }
-static void p2_timer_scheduler(void *p_event_data, uint16_t event_size) { move_player(1); }
+static void p1_timer_scheduler(void *p_event_data, uint16_t event_size) { game_next_step(0); }
+static void p2_timer_scheduler(void *p_event_data, uint16_t event_size) { game_next_step(1); }
 
 // timer handler --> scheduler
 static void game_timer_handler(void *p_context) { app_sched_event_put(&game_time, sizeof(game_time), game_timer_scheduler); }
@@ -69,14 +70,18 @@ static void p1_timer_handler(void *p_context) { app_sched_event_put(&p1_time, si
 static void p2_timer_handler(void *p_context) { app_sched_event_put(&p2_time, sizeof(p2_time), p2_timer_scheduler); }
 
 // start timer
-static void start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL); }
+void ble_start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000), NULL); }
 static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(200), NULL); }	// 0.2초마다 이동
 static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(200), NULL); }
 
 // stop timer
-static void stop_p1_timer() {
+void stop_p1_timer() {
 	app_timer_stop(m_p1_timer_id);
-	stop_player(0);
+	game_next_step(0);
+}
+static void stop_p2_timer() {
+	app_timer_stop(m_p2_timer_id);
+	game_next_step(1);
 }
 
 static void create_timers() {
@@ -90,24 +95,42 @@ static void create_timers() {
 static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
 	uint8_t pin = *((uint8_t*)p_event_data);
 	switch(pin) {
+	// 키 조합에 따라 상태 변경
+	// READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK
 	case P1_FN_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 27);	// 26, 27
+		
+		if(player[0].status == READY) { player[0].newStatus = DEFENSE; }         // READY -> DEFENSE
+		else if(player[0].status == WALK) { player[0].newStatus = PUNCH; }    // WALK -> PUNCH
 		break;
+		
 	case P1_UP_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 29);	// 28, 29
+		
+		if(player[0].status == READY) { player[0].newStatus = JUMP; }         // READY -> JUMP
+		else if(player[0].status == WALK) { player[0].newStatus = DJUMP; }    // WALK -> DJUMP
+		else if(player[0].status == DEFENSE) { player[0].newStatus = KICK; }  // DEFENSE -> KICK
 		break;
+		
 	case P1_LE_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 31);	// 30, 31
+		
+		player[0].direction = LEFT;	// 방향은 왼쪽
+		if(player[0].status == READY) { player[0].newStatus = WALK; }         // READY -> WALK
+		else if(player[0].status == JUMP) { player[0].newStatus = DJUMP; }    // JUMP -> DJUMP
+		else if(player[0].status == DEFENSE) { player[0].newStatus = PUNCH; }  // DEFENSE -> PUNCH
 		break;
+		
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 33);	// 32, 33
 		
-		player[0].status = WALK;
-		player[0].direction = RIGHT;
-		
-		start_p1_timer();
+		player[0].direction = RIGHT;	// 방향은 오른쪽
+		if(player[0].status == READY) { player[0].newStatus = WALK; }         // READY -> WALK
+		else if(player[0].status == JUMP) { player[0].newStatus = DJUMP; }    // JUMP -> DJUMP
+		else if(player[0].status == DEFENSE) { player[0].newStatus = PUNCH; }  // DEFENSE -> PUNCH
 		break;
 	}
+	start_p1_timer();
 }
 
 static void button_released_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
@@ -121,24 +144,22 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 		break;
 	case P1_LE_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 30);	// 30, 31
+		
+		if(player[0].status != JUMP) { player[0].newStatus = READY; }
+		stop_p1_timer();
 		break;
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 32);	// 32, 33
 		
-		if(player[0].status != JUMP) { player[0].status = READY; }
-		player[0].direction = NEUTRAL;
-		
+		if(player[0].status != JUMP) { player[0].newStatus = READY; }
 		stop_p1_timer();
 		break;
 	}
 }
 
 static void button_event_handler(uint8_t pin, uint8_t button_action) {
-	if(button_action) {
-		app_sched_event_put(&pin, sizeof(pin), button_pressed_scheduler_event_handler);
-	} else {
-		app_sched_event_put(&pin, sizeof(pin), button_released_scheduler_event_handler);
-	}
+	if(button_action) { app_sched_event_put(&pin, sizeof(pin), button_pressed_scheduler_event_handler); }
+	else { app_sched_event_put(&pin, sizeof(pin), button_released_scheduler_event_handler); }
 }
 
 static void buttons_init(void) {
@@ -178,6 +199,10 @@ static void advertising_start(void) {
 //	bsp_board_led_on(ADVERTISING_LED);
 }
 
+static void game_ready_scheduler(void *p_event_data, uint16_t event_size) {
+	game_ready();
+}
+
 void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 	ret_code_t err_code;
 
@@ -190,6 +215,7 @@ void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context) {
 
 		err_code = app_button_enable();
 		APP_ERROR_CHECK(err_code);
+		app_sched_event_put(NULL, 0, game_ready_scheduler);	// 블루투스 연결되면 게임 레디
 		break;
 
 	case BLE_GAP_EVT_DISCONNECTED:
@@ -308,8 +334,41 @@ static void gatt_init(void) {
 	APP_ERROR_CHECK(err_code);
 }
 
+static void p2_btn_scheduler(void *p_event_data, uint16_t event_size) {
+	uint8_t p2_state = *((uint8_t*)p_event_data);
+	
+	switch (p2_state) {
+	case 0: bsp_board_led_off(P2_FN_BTNLED); break;
+	case 1: bsp_board_led_on(P2_FN_BTNLED); break;
+	case 2: bsp_board_led_off(P2_UP_BTNLED); break;
+	case 3: bsp_board_led_on(P2_UP_BTNLED); break;
+	
+	case 4: // p2 left 버튼 뗐을 때
+		if(player[1].status != JUMP) { player[1].newStatus = READY; }
+		stop_p2_timer();
+		break;
+		
+	case 5: // p2 left 버튼 눌렀을 때
+		player[1].newStatus = WALK;
+		player[1].direction = LEFT;
+		start_p2_timer();
+		break;
+		
+	case 6: // p2 right 버튼 뗐을 때
+		if(player[1].status != JUMP) { player[1].newStatus = READY; }
+		stop_p2_timer();
+		break;
+		
+	case 7: // p2 right 버튼 눌렀을 때
+		player[1].newStatus = WALK;
+		player[1].direction = RIGHT;
+		start_p2_timer();
+		break;
+	default: break;
+	}
+}
+
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
-	// TODO led 켜고 끄는 딜레이는 줄일 수 없는건지
 	switch (led_state) {
 	case 0: bsp_board_led_off(P2_FN_BTNLED); break;
 	case 1: bsp_board_led_on(P2_FN_BTNLED); break;
@@ -318,9 +377,10 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
 	case 4: bsp_board_led_off(P2_LE_BTNLED); break;
 	case 5: bsp_board_led_on(P2_LE_BTNLED); break;
 	case 6: bsp_board_led_off(P2_RI_BTNLED); break;
-	case 7: bsp_board_led_on(P2_RI_BTNLED); break;
-	default: break;
-	}
+	case 7: bsp_board_led_on(P2_RI_BTNLED); break; }
+	
+	// p2 움직이는 것도 스케줄러에 넣음
+	app_sched_event_put(&led_state, sizeof(led_state), p2_btn_scheduler);
 }
 
 static void services_init(void) {
@@ -392,9 +452,6 @@ void ble_start() {
 	// scheduler
 	app_timer_init();
 	create_timers();	// 앱 타이머
-	start_game_timer();
-	
-	start_p2_timer();
 	buttons_init();
 	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 	
@@ -407,5 +464,4 @@ void ble_start() {
 	conn_params_init();
 
 	advertising_start();
-	game_ready();
 }
