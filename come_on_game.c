@@ -1,6 +1,7 @@
 #include "come_on.h"
 
 Player player[2];
+uint8_t buttons[2][4] = { {0, 0, 0, 0}, {0, 0, 0, 0} };
 
 static void clear_previous(uint8_t p) {
 	int xOffset = 0;
@@ -188,4 +189,157 @@ void game_ready() {
 	draw_go();
 
 	start_game_timer();
+}
+
+/**************************************************/
+
+// 키 조합에 따라 상태 변경
+// READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK
+void press_fn_button(uint8_t p) {
+	buttons[p][0] = 1;
+	
+	if(player[p].status != JUMP && player[p].status != DJUMP) { // 점프 중이 아니고
+		if(buttons[p][2] == buttons[p][3]) {                // READY 였으면
+			player[p].newStatus = DEFENSE;              // 방어
+		} else {                                            // WALK 였으면
+			player[p].newStatus = PUNCH;                // 펀치!
+		}
+	}
+}
+
+void press_up_button(uint8_t p) {
+	buttons[p][1] = 1;
+	
+	if(buttons[p][0] == 0) {
+		if(buttons[p][2] == buttons[p][3]) {           // READY 였으면
+			player[p].newStatus = JUMP;            // 점프
+		} else {                                       // WALK 였으면
+			player[p].newStatus = DJUMP;           // 대각선 점프
+		}
+	} else {                                               // DEFENSE 또는 PUNCH(x) 였으면
+		player[p].newStatus = KICK;                    // 발차기
+	}
+}
+
+void press_left_button(uint8_t p) {
+	buttons[p][2] = 1;
+	
+	player[p].direction = LEFT;	// 방향은 왼쪽
+	
+	// 점프 중에는 좌우 방향키만 먹는다
+	if(player[p].status == JUMP || player[p].status == DJUMP) {
+		if(buttons[p][3] == 0) { player[p].newStatus = DJUMP; } // JUMP -> DJUMP
+		else { player[p].newStatus = JUMP; }                    // DJUMP -> JUMP
+		return;
+	}
+	
+	if(buttons[p][0] == 0 && buttons[p][1] == 0) {
+		if(buttons[p][3] == 0) { player[p].newStatus = WALK; }  // READY -> WALK
+		else { player[p].newStatus = READY; }                   // WALK -> READY
+	} else if(buttons[p][0] == 0 && buttons[p][1] == 1) {
+		if(buttons[p][3] == 0) { player[p].newStatus = DJUMP; } // JUMP -> DJUMP
+		else { player[p].newStatus = JUMP; }                    // DJUMP -> JUMP
+	} else if(buttons[p][0] == 1 && buttons[p][1] == 0) {
+		if(buttons[p][3] == 0) { player[p].newStatus = PUNCH;} // DEFENSE -> PUNCH
+		//else { player[p].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
+	} else {}                                                       // KICK -> KICK
+}
+
+void press_right_button(uint8_t p) {
+	buttons[p][3] = 1;
+	
+	player[p].direction = RIGHT;	// 방향은 오른쪽
+	
+	// 점프 중에는 좌우 방향키만 먹는다
+	if(player[p].status == JUMP || player[p].status == DJUMP) {
+		if(buttons[p][2] == 0) { player[p].newStatus = DJUMP; } // JUMP -> DJUMP
+		else { player[p].newStatus = JUMP; }                    // DJUMP -> JUMP
+		return;
+	}
+	
+	if(buttons[p][0] == 0 && buttons[p][1] == 0) {
+		if(buttons[p][2] == 0) { player[p].newStatus = WALK; }  // READY -> WALK
+		else { player[p].newStatus = READY; }                   // WALK -> READY
+	} else if(buttons[p][0] == 0 && buttons[p][1] == 1) {
+		if(buttons[p][2] == 0) { player[p].newStatus = DJUMP; } // JUMP -> DJUMP
+		else { player[p].newStatus = JUMP; }                    // DJUMP -> JUMP
+	} else if(buttons[p][0] == 1 && buttons[p][1] == 0) {
+		if(buttons[p][2] == 0) { player[p].newStatus = PUNCH; } // DEFENSE -> PUNCH
+		else { player[p].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
+	} else {}                                                       // KICK -> KICK
+}
+
+void release_fn_button(uint8_t p) {
+	buttons[p][0] = 0;
+
+	if(player[p].status != JUMP && player[p].status != DJUMP) { // 점프 중이 아니고
+		if(buttons[p][2] == buttons[p][3]) {                // DEFENSE 였으면
+			player[p].newStatus = READY;                // 준비
+		} else {                                            // PUNCH 였으면
+			player[p].newStatus = WALK;                 // 걷기
+		}
+	}
+}
+
+void release_up_button(uint8_t p) {
+	buttons[p][1] = 0;
+	
+	// 점프는 점프가 끝났을 때 READY나 WALK로 상태를 바꾼다
+	if(buttons[p][0] == 0) {
+		if(buttons[p][2] == buttons[p][3]) {           // JUMP 였으면
+			//player[p].newStatus = READY;           // 준비
+		} else {                                       // DJUMP 였으면
+			//player[p].newStatus = WALK;            // 걷기
+		}
+	} else {
+		if(buttons[p][2] == buttons[p][3]) {           // KICK 였으면
+			player[p].newStatus = DEFENSE;         // 방어
+		} else {                                       // KICK 였으면
+			player[p].newStatus = PUNCH;            // 펀치
+		}
+	}
+}
+
+void release_left_button(uint8_t p) {
+	buttons[p][2] = 0;
+	
+	// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
+	if(player[p].status == JUMP || player[p].status == DJUMP) {
+		if(buttons[p][3] == 0) { player[p].newStatus = JUMP; }    // DJUMP -> JUMP
+		else { player[p].newStatus = DJUMP; }                     // JUMP -> DJUMP
+		return;
+	}
+	
+	if(buttons[p][0] == 0 && buttons[p][1] == 0) {
+		if(buttons[p][3] == 0) { player[p].newStatus = READY; }   // WALK -> READY
+		else { player[p].newStatus = WALK; }                      // READY -> WALK
+	} else if(buttons[p][0] == 0 && buttons[p][1] == 1) {
+		if(buttons[p][3] == 0) { player[p].newStatus = JUMP; }    // DJUMP -> JUMP
+		else { player[p].newStatus = DJUMP; }                     // JUMP -> DJUMP
+	} else if(buttons[p][0] == 1 && buttons[p][1] == 0) {
+		if(buttons[p][3] == 0) { player[p].newStatus = DEFENSE; } // PUNCH -> DEFENSE
+		else { player[p].newStatus = PUNCH; }                     // DEFENSE -> PUNCH
+	} else {}                                                         // KICK -> KICK
+}
+
+void release_right_button(uint8_t p) {
+	buttons[p][3] = 0;
+
+	// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
+	if(player[p].status == JUMP || player[p].status == DJUMP) {
+		if(buttons[p][2] == 0) { player[p].newStatus = JUMP; }    // DJUMP -> JUMP
+		else { player[p].newStatus = DJUMP; }                     // JUMP -> DJUMP
+		return;
+	}
+	
+	if(buttons[p][0] == 0 && buttons[p][1] == 0) {
+		if(buttons[p][2] == 0) { player[p].newStatus = READY; }   // WALK -> READY
+		else { player[p].newStatus = WALK; }                      // READY -> WALK
+	} else if(buttons[p][0] == 0 && buttons[p][1] == 1) {
+		if(buttons[p][2] == 0) { player[p].newStatus = JUMP; }    // DJUMP -> JUMP
+		else { player[p].newStatus = DJUMP; }                     // JUMP -> DJUMP
+	} else if(buttons[p][0] == 1 && buttons[p][1] == 0) {
+		if(buttons[p][2] == 0) { player[p].newStatus = DEFENSE; } // PUNCH -> DEFENSE
+		else { player[p].newStatus = PUNCH; }                     // DEFENSE -> PUNCH
+	} else {}                                                         // KICK -> KICK
 }

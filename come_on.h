@@ -52,6 +52,7 @@ typedef struct {
 } Player;
 
 extern Player player[2];
+extern uint8_t buttons[2][4];
 
 /**************************************************/
 
@@ -86,4 +87,12 @@ void stop_player_timer(uint8_t p);
 // game
 void game_next_step(uint8_t num);
 void game_ready();
+void press_fn_button(uint8_t p);
+void press_up_button(uint8_t p);
+void press_left_button(uint8_t p);
+void press_right_button(uint8_t p);
+void release_fn_button(uint8_t p);
+void release_up_button(uint8_t p);
+void release_left_button(uint8_t p);
+void release_right_button(uint8_t p);
 

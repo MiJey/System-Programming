@@ -38,9 +38,6 @@ NRF_BLE_GATT_DEF(m_gatt);       // GATT module instance.
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;	// Handle of the current connection.
 
-static uint8_t p1_buttons[] = { 0, 0, 0, 0 };
-//static uint8_t p2_buttons[] = { 0, 0, 0, 0 };
-
 /******************** 앱 타이머 ********************/
 
 APP_TIMER_DEF(m_game_timer_id); // 게임 시간 타이머
@@ -77,7 +74,7 @@ void start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000)
 void start_player_timer(uint8_t p, uint8_t tick) {
 	app_timer_start(p == 0 ? m_p1_timer_id : m_p2_timer_id, APP_TIMER_TICKS(tick), NULL);
 }
-void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(100), NULL); }	// 0.2초마다 이동
+static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(100), NULL); }
 static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(100), NULL); }
 
 // stop timer
@@ -96,84 +93,24 @@ static void create_timers() {
 static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
 	uint8_t pin = *((uint8_t*)p_event_data);
 	switch(pin) {
-	// 키 조합에 따라 상태 변경
-	// READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK
 	case P1_FN_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 27);	// 26, 27
-		p1_buttons[0] = 1;
-		
-		if(player[0].status != JUMP && player[0].status != DJUMP) { // 점프 중이 아니고
-			if(p1_buttons[2] == p1_buttons[3]) {                // READY 였으면
-				player[0].newStatus = DEFENSE;              // 방어
-			} else {                                            // WALK 였으면
-				player[0].newStatus = PUNCH;                // 펀치!
-			}
-		}
+		press_fn_button(0);
 		break;
 		
 	case P1_UP_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 29);	// 28, 29
-		p1_buttons[1] = 1;
-		
-		if(p1_buttons[0] == 0) {
-			if(p1_buttons[2] == p1_buttons[3]) {           // READY 였으면
-				player[0].newStatus = JUMP;            // 점프
-			} else {                                       // WALK 였으면
-				player[0].newStatus = DJUMP;           // 대각선 점프
-			}
-		} else {                                               // DEFENSE 또는 PUNCH(x) 였으면
-			player[0].newStatus = KICK;                    // 발차기
-		}
+		press_up_button(0);
 		break;
 		
 	case P1_LE_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 31);	// 30, 31
-		p1_buttons[2] = 1;
-		
-		player[0].direction = LEFT;	// 방향은 왼쪽
-		
-		// 점프 중에는 좌우 방향키만 먹는다
-		if(player[0].status == JUMP || player[0].status == DJUMP) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
-			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
-			break;
-		}
-		
-		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = WALK; }  // READY -> WALK
-			else { player[0].newStatus = READY; }                   // WALK -> READY
-		} else if(p1_buttons[0] == 0 && p1_buttons[1] == 1) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
-			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
-		} else if(p1_buttons[0] == 1 && p1_buttons[1] == 0) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = PUNCH;} // DEFENSE -> PUNCH
-			//else { player[0].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
-		} else {}                                                       // KICK -> KICK
+		press_left_button(0);
 		break;
 		
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 33);	// 32, 33
-		p1_buttons[3] = 1;
-		
-		player[0].direction = RIGHT;	// 방향은 오른쪽
-		
-		// 점프 중에는 좌우 방향키만 먹는다
-		if(player[0].status == JUMP || player[0].status == DJUMP) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
-			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
-			break;
-		}
-		
-		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = WALK; }  // READY -> WALK
-			else { player[0].newStatus = READY; }                   // WALK -> READY
-		} else if(p1_buttons[0] == 0 && p1_buttons[1] == 1) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
-			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
-		} else if(p1_buttons[0] == 1 && p1_buttons[1] == 0) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = PUNCH; } // DEFENSE -> PUNCH
-			else { player[0].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
-		} else {}                                                       // KICK -> KICK
+		press_right_button(0);
 		break;
 	}
 	start_p1_timer();
@@ -182,85 +119,24 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 static void button_released_scheduler_event_handler(void *p_event_data, uint16_t event_size) {
 	uint8_t pin = *((uint8_t*)p_event_data);
 	switch(pin) {
-	// 키 조합에 따라 상태 변경
-	// READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK
 	case P1_FN_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 26);	// 26, 27
-		p1_buttons[0] = 0;
-		
-		if(player[0].status != JUMP && player[0].status != DJUMP) { // 점프 중이 아니고
-			if(p1_buttons[2] == p1_buttons[3]) {                // DEFENSE 였으면
-				player[0].newStatus = READY;                // 준비
-			} else {                                            // PUNCH 였으면
-				player[0].newStatus = WALK;                 // 걷기
-			}
-		}
+		release_fn_button(0);
 		break;
 	
 	case P1_UP_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 28);	// 28, 29
-		p1_buttons[1] = 0;
-		
-		// 점프는 점프가 끝났을 때 READY나 WALK로 상태를 바꾼다
-		if(p1_buttons[0] == 0) {
-			if(p1_buttons[2] == p1_buttons[3]) {           // JUMP 였으면
-				//player[0].newStatus = READY;           // 준비
-			} else {                                       // DJUMP 였으면
-				//player[0].newStatus = WALK;            // 걷기
-			}
-		} else {
-			if(p1_buttons[2] == p1_buttons[3]) {           // KICK 였으면
-				player[0].newStatus = DEFENSE;         // 방어
-			} else {                                       // KICK 였으면
-				player[0].newStatus = PUNCH;            // 펀치
-			}
-		}
+		release_up_button(0);
 		break;
 		
 	case P1_LE_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 30);	// 30, 31
-		p1_buttons[2] = 0;
-		
-		// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
-		if(player[0].status == JUMP || player[0].status == DJUMP) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
-			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
-			break;
-		}
-		
-		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = READY; }   // WALK -> READY
-			else { player[0].newStatus = WALK; }                      // READY -> WALK
-		} else if(p1_buttons[0] == 0 && p1_buttons[1] == 1) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
-			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
-		} else if(p1_buttons[0] == 1 && p1_buttons[1] == 0) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = DEFENSE; } // PUNCH -> DEFENSE
-			else { player[0].newStatus = PUNCH; }                     // DEFENSE -> PUNCH
-		} else {}                                                         // KICK -> KICK
+		release_left_button(0);
 		break;
 		
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 32);	// 32, 33
-		p1_buttons[3] = 0;
-
-		// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
-		if(player[0].status == JUMP || player[0].status == DJUMP) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
-			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
-			break;
-		}
-		
-		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = READY; }   // WALK -> READY
-			else { player[0].newStatus = WALK; }                      // READY -> WALK
-		} else if(p1_buttons[0] == 0 && p1_buttons[1] == 1) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
-			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
-		} else if(p1_buttons[0] == 1 && p1_buttons[1] == 0) {
-			if(p1_buttons[2] == 0) { player[0].newStatus = DEFENSE; } // PUNCH -> DEFENSE
-			else { player[0].newStatus = PUNCH; }                     // DEFENSE -> PUNCH
-		} else {}                                                         // KICK -> KICK
+		release_right_button(0);
 		break;
 	}
 }
@@ -444,36 +320,19 @@ static void gatt_init(void) {
 
 static void p2_btn_scheduler(void *p_event_data, uint16_t event_size) {
 	uint8_t p2_state = *((uint8_t*)p_event_data);
-	
 	switch (p2_state) {
-	case 0: bsp_board_led_off(P2_FN_BTNLED); break;
-	case 1: bsp_board_led_on(P2_FN_BTNLED); break;
-	case 2: bsp_board_led_off(P2_UP_BTNLED); break;
-	case 3: bsp_board_led_on(P2_UP_BTNLED); break;
-	
-	case 4: // p2 left 버튼 뗐을 때
-		if(player[1].status != JUMP) { player[1].newStatus = READY; }
-		stop_player_timer(1);
-		break;
-		
-	case 5: // p2 left 버튼 눌렀을 때
-		player[1].newStatus = WALK;
-		player[1].direction = LEFT;
-		start_p2_timer();
-		break;
-		
-	case 6: // p2 right 버튼 뗐을 때
-		if(player[1].status != JUMP) { player[1].newStatus = READY; }
-		stop_player_timer(1);
-		break;
-		
-	case 7: // p2 right 버튼 눌렀을 때
-		player[1].newStatus = WALK;
-		player[1].direction = RIGHT;
-		start_p2_timer();
-		break;
+	case 0: release_fn_button(1); break;
+	case 1: press_fn_button(1); break;
+	case 2: release_up_button(1); break;
+	case 3: press_up_button(1); break;
+	case 4: release_left_button(1); break;
+	case 5: press_left_button(1); break;
+	case 6: release_right_button(1); break;
+	case 7: press_right_button(1); break;
 	default: break;
 	}
+	
+	if(p2_state % 2 == 1) { start_p2_timer(); }
 }
 
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state) {
