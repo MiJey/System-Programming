@@ -44,12 +44,14 @@ void game_next_step(uint8_t p) {
 	// 새로운 위치를 설정하고 드로우
 	switch(player[p].status) {
 	case READY:
+		stop_player_timer(p);	// 동작 그만
+		
 		// 범위를 벗어났는지 체크
 		if(player[p].x < 0) { player[p].x = 0; }
 		if(player[p].x > 108) { player[p].x = 108; }
 		player[p].y = 39;
+		player[p].tag = false;	// 태그 초기화
 		
-		stop_player_timer(p);	// 동작 그만
 		draw_ready_p(player[p].x, player[p].y, player[p].direction == LEFT);
 		break;
 		
@@ -58,12 +60,12 @@ void game_next_step(uint8_t p) {
 		
 		if(player[p].direction == LEFT) {
 			// 왼쪽으로 걷기, 미러모드 true
-			if(player[p].x > 0) { player[p].x -= 3; }
+			if(player[p].x > 0) { player[p].x -= 6; }
 			player[p].tag ? draw_walk_a(player[p].x, player[p].y, true) : draw_walk_b(player[p].x, player[p].y, true);
 			player[p].tag = !player[p].tag;
 		} else {
 			// 오른쪽으로 걷기, 미러모드 false
-			if(player[p].x < 108) { player[p].x += 3; }
+			if(player[p].x < 105) { player[p].x += 6; }
 			player[p].tag ? draw_walk_a(player[p].x, player[p].y, false) : draw_walk_b(player[p].x, player[p].y, false);
 			player[p].tag = !player[p].tag;
 		}
@@ -72,32 +74,36 @@ void game_next_step(uint8_t p) {
 
 	case DJUMP:
 		// 양 옆으로 이동
-		if(player[p].direction == LEFT) { if(player[p].x > 0) { player[p].x -= 3; } }
-		else { if(player[p].x < 108) { player[p].x += 3; } }
+		if(player[p].direction == LEFT) { if(player[p].x > 0) { player[p].x -= 6; } }
+		else { if(player[p].x < 105) { player[p].x += 6; } }
 	case JUMP: {
-		if(player[p].x > 96) { player[p].x = 96; }	// 오른쪽 벽에 붙어서 점프하면 밀려나도록
-		player[p].y = 37;
+		if(player[p].x > 105) { player[p].x = 105; }	// 오른쪽 벽에 붙어서 점프하면 밀려나도록
+		if(player[p].direction == LEFT) {
+			if(player[p].x < 6) { player[p].x = 0; }	// 왼쪽 벽에 붙어서 점프하면 밀려나도록
+			else { player[p].x -= 6; }
+		}
 		
 		// 점프 동작 수행
-		uint8_t v = 20;	              // 속도
-		uint8_t g = 3;	              // 중력 가속도
+		uint8_t v = 35;	              // 속도
+		uint8_t g = 5;	              // 중력 가속도
 		uint8_t t = player[p].t;      // 시간
-		uint8_t y0 = 39;              // 준비자세일 때 높이(초기값)
-		uint8_t y = y0 + v*t - g*t*t;
+		uint8_t y0 = 30;              // 점프 끝나는 높이
+		int y = y0 + v*t - g*t*t;
 	
 		if(y < y0) {
 			player[p].t = 0;
 			if(player[p].status == DJUMP) { player[p].newStatus = WALK; }
 			else { player[p].newStatus = READY; }
 		} else {
-			player[p].y = y;
+			player[p].y = y < 0 ? 0 : y;
 			player[p].t += 1;
 			draw_jump(player[p].x, player[p].y, player[p].direction == LEFT);
 		}
 		break; }
 		
-	case DEFENSE:
+	case DEFENSE:		
 		player[p].y = 35;
+		
 		draw_defense(player[p].x, player[p].y, player[p].direction == LEFT);
 		break;
 		
@@ -113,7 +119,14 @@ void game_next_step(uint8_t p) {
 		draw_punch(player[p].x, player[p].y, player[p].direction == LEFT);
 		if(player[p].direction == LEFT) { player[p].x += 6; }
 		
-		player[p].newStatus = DEFENSE;
+		if(player[p].t == 2) { 
+			player[p].t = 0;
+			player[p].newStatus = DEFENSE;
+		}
+		else {
+			player[p].t += 1;
+		}
+		
 		break;
 		
 	case KICK:
@@ -128,8 +141,13 @@ void game_next_step(uint8_t p) {
 		draw_kick(player[p].x, player[p].y, player[p].direction == LEFT);
 		if(player[p].direction == LEFT) { player[p].x += 12; }
 		
-		player[p].newStatus = DEFENSE;
-		break;
+		if(player[p].t == 3) { 
+			player[p].t = 0;
+			player[p].newStatus = DEFENSE;
+		}
+		else {
+			player[p].t += 1;
+		}
 		break;
 	}
 }

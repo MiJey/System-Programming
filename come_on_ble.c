@@ -77,8 +77,8 @@ void start_game_timer() { app_timer_start(m_game_timer_id, APP_TIMER_TICKS(1000)
 void start_player_timer(uint8_t p, uint8_t tick) {
 	app_timer_start(p == 0 ? m_p1_timer_id : m_p2_timer_id, APP_TIMER_TICKS(tick), NULL);
 }
-static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(200), NULL); }	// 0.2초마다 이동
-static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(200), NULL); }
+void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(100), NULL); }	// 0.2초마다 이동
+static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(100), NULL); }
 
 // stop timer
 void stop_player_timer(uint8_t p) {
@@ -102,11 +102,11 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 27);	// 26, 27
 		p1_buttons[0] = 1;
 		
-		if(p1_buttons[1] == 0) {                                // 점프 중이 아니고
-			if(p1_buttons[2] == p1_buttons[3]) {            // READY 였으면
-				player[0].newStatus = DEFENSE;          // 방어
-			} else {                                        // WALK 였으면
-				player[0].newStatus = PUNCH;            // 펀치!
+		if(player[0].status != JUMP && player[0].status != DJUMP) { // 점프 중이 아니고
+			if(p1_buttons[2] == p1_buttons[3]) {                // READY 였으면
+				player[0].newStatus = DEFENSE;              // 방어
+			} else {                                            // WALK 였으면
+				player[0].newStatus = PUNCH;                // 펀치!
 			}
 		}
 		break;
@@ -132,6 +132,13 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 		
 		player[0].direction = LEFT;	// 방향은 왼쪽
 		
+		// 점프 중에는 좌우 방향키만 먹는다
+		if(player[0].status == JUMP || player[0].status == DJUMP) {
+			if(p1_buttons[3] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
+			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
+			break;
+		}
+		
 		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
 			if(p1_buttons[3] == 0) { player[0].newStatus = WALK; }  // READY -> WALK
 			else { player[0].newStatus = READY; }                   // WALK -> READY
@@ -139,8 +146,8 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 			if(p1_buttons[3] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
 			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
 		} else if(p1_buttons[0] == 1 && p1_buttons[1] == 0) {
-			if(p1_buttons[3] == 0) { player[0].newStatus = PUNCH; } // DEFENSE -> PUNCH
-			else { player[0].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
+			if(p1_buttons[3] == 0) { player[0].newStatus = PUNCH;} // DEFENSE -> PUNCH
+			//else { player[0].newStatus = DEFENSE; }                 // PUNCH -> DEFENSE
 		} else {}                                                       // KICK -> KICK
 		break;
 		
@@ -149,6 +156,13 @@ static void button_pressed_scheduler_event_handler(void *p_event_data, uint16_t 
 		p1_buttons[3] = 1;
 		
 		player[0].direction = RIGHT;	// 방향은 오른쪽
+		
+		// 점프 중에는 좌우 방향키만 먹는다
+		if(player[0].status == JUMP || player[0].status == DJUMP) {
+			if(p1_buttons[2] == 0) { player[0].newStatus = DJUMP; } // JUMP -> DJUMP
+			else { player[0].newStatus = JUMP; }                    // DJUMP -> JUMP
+			break;
+		}
 		
 		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
 			if(p1_buttons[2] == 0) { player[0].newStatus = WALK; }  // READY -> WALK
@@ -174,11 +188,11 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 26);	// 26, 27
 		p1_buttons[0] = 0;
 		
-		if(p1_buttons[1] == 0) {                                // 발차기 중이 아니고
-			if(p1_buttons[2] == p1_buttons[3]) {            // DEFENSE 였으면
-				player[0].newStatus = READY;            // 준비
-			} else {                                        // PUNCH 였으면
-				player[0].newStatus = WALK;             // 걷기
+		if(player[0].status != JUMP && player[0].status != DJUMP) { // 점프 중이 아니고
+			if(p1_buttons[2] == p1_buttons[3]) {                // DEFENSE 였으면
+				player[0].newStatus = READY;                // 준비
+			} else {                                            // PUNCH 였으면
+				player[0].newStatus = WALK;                 // 걷기
 			}
 		}
 		break;
@@ -187,11 +201,12 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 28);	// 28, 29
 		p1_buttons[1] = 0;
 		
+		// 점프는 점프가 끝났을 때 READY나 WALK로 상태를 바꾼다
 		if(p1_buttons[0] == 0) {
 			if(p1_buttons[2] == p1_buttons[3]) {           // JUMP 였으면
-				player[0].newStatus = READY;           // 준비
+				//player[0].newStatus = READY;           // 준비
 			} else {                                       // DJUMP 였으면
-				player[0].newStatus = WALK;            // 걷기
+				//player[0].newStatus = WALK;            // 걷기
 			}
 		} else {
 			if(p1_buttons[2] == p1_buttons[3]) {           // KICK 였으면
@@ -205,6 +220,13 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 	case P1_LE_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 30);	// 30, 31
 		p1_buttons[2] = 0;
+		
+		// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
+		if(player[0].status == JUMP || player[0].status == DJUMP) {
+			if(p1_buttons[3] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
+			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
+			break;
+		}
 		
 		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
 			if(p1_buttons[3] == 0) { player[0].newStatus = READY; }   // WALK -> READY
@@ -221,6 +243,13 @@ static void button_released_scheduler_event_handler(void *p_event_data, uint16_t
 	case P1_RI_BUTTON:
 		ble_lbs_on_button_change(m_conn_handle, &m_lbs, 32);	// 32, 33
 		p1_buttons[3] = 0;
+
+		// 점프 중에는 좌우 방향키를 떼도 계속 점프를 한다
+		if(player[0].status == JUMP || player[0].status == DJUMP) {
+			if(p1_buttons[2] == 0) { player[0].newStatus = JUMP; }    // DJUMP -> JUMP
+			else { player[0].newStatus = DJUMP; }                     // JUMP -> DJUMP
+			break;
+		}
 		
 		if(p1_buttons[0] == 0 && p1_buttons[1] == 0) {
 			if(p1_buttons[2] == 0) { player[0].newStatus = READY; }   // WALK -> READY
