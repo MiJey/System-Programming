@@ -48,7 +48,7 @@ static void clear_previous(uint8_t p) {
 		player[p].y + yOffset - getHeight(player[p].status));
 }
 
-static void p1_attack_to_p2(uint8_t p1, uint8_t p2) {
+int p1_attack_to_p2(uint8_t p1, uint8_t p2) {
 	// p1: 공격, p2: 데미지 입음
 	// READY, WALK, JUMP, DJUMP, DEFENSE, PUNCH, KICK
 	uint8_t damage[6][3] = {{2, 3, 1}, {3, 4, 2}, {1, 2, 1}, {2, 3, 0}, {1, 1, 2}, {1, 3, 3}};
@@ -59,7 +59,7 @@ static void p1_attack_to_p2(uint8_t p1, uint8_t p2) {
 	case KICK: j = 1; break;
 	case JUMP:
 	case DJUMP: j = 2; break;
-	default: return;	// 공격 x
+	default: return 0;	// 공격 x, 데미지 0 리턴
 	}
 	
 	switch(player[p2].status) {
@@ -79,30 +79,100 @@ static void p1_attack_to_p2(uint8_t p1, uint8_t p2) {
 	}
 	
 	draw_hp(p2 + 1, player[p2].hp);
+	return damage[i][j];
 }
 
 // 충돌체크
 static void collision_check() {
-	uint8_t ax = player[0].x;
-	uint8_t ay = player[0].y;
-	uint8_t bx = player[0].x + getWidth(player[0].status);
-	uint8_t by = player[0].y - getWidth(player[0].status);
-	uint8_t cx = player[1].x;
-	uint8_t cy = player[1].y;
-	uint8_t dx = player[1].x + getWidth(player[1].status);
-	uint8_t dy = player[1].y - getWidth(player[1].status);
+	bsp_board_led_invert(1);
 	
-	if((dx < ax || bx < cx) && (dy > ay || by > cy)) {
-		bsp_board_led_invert(2);
+	uint8_t l = 0, r = 1;           // 기본적으로 p1이 왼쪽
+	if(player[0].x > player[1].x) { // p2 < p1이면 p2가 왼쪽
+		l = 1; r = 0;
+	}
+	
+	uint8_t ax = player[l].x;
+	uint8_t ay = player[l].y;
+	uint8_t bx = player[l].x + getWidth(player[l].status);
+	uint8_t by = player[l].y - getHeight(player[l].status);
+	
+	uint8_t cx = player[r].x;
+	uint8_t cy = player[r].y;
+	uint8_t dx = player[r].x + getWidth(player[r].status);
+	uint8_t dy = player[r].y - getHeight(player[r].status);
+	
+	if(bx < cx || by > cy || dy > ay) {
 		// 충돌 x
+		bsp_board_led_off(0);
 	} else {
 		// 충돌 o
-		bsp_board_led_invert(3);
-		p1_attack_to_p2(0, 1);
-		p1_attack_to_p2(1, 0);
+		bsp_board_led_on(0);
+		int l_dam = p1_attack_to_p2(r, l);	// l이 받은 데미지
+		int r_dam = p1_attack_to_p2(l, r);	// r이 받은 데미지
 		
+		draw_hp(l + 1, player[l].hp);
+		draw_hp(r + 1, player[r].hp);
+		
+		// 체력이 모두 닳은 경우
 		if(player[0].hp == 0 || player[1].hp == 0) {
 			game_finish_round();
+			return;
+		}
+		
+		//--------------------------------------------------
+		
+		clear_previous(l);
+		clear_previous(r);
+		
+		int Loffset = 0;
+		int Roffset = 0;
+		
+		if(l_dam == r_dam) {
+			// 데미지가 같은 경우 똑같이 움직임
+			int offset = bx - cx + 1;	// 3의 배수
+			offset /= 3;
+			Loffset = offset / 2 * 3;
+			Roffset = offset * 3 - Loffset;
+		} else if(l_dam > r_dam) {
+			// l이 데미지가 큰 경우 l이 밀려남
+			Loffset = bx - cx + 1;
+		} else {
+			// r이 데미지가 큰 경우 r이 밀려남
+			Roffset = bx - cx + 1;
+		}
+		
+		if(ax - Loffset < 0) {
+			// 왼쪽 벽에 막힐 경우
+			player[l].x = 0;
+			player[r].x = getWidth(player[l].status) + 1;
+		} else if(dx + Roffset > 125) {
+			// 오른쪽 벽에 막힐 경우
+			player[r].x = 125 - getWidth(player[r].status);
+			player[l].x = player[r].x - getWidth(player[l].status) - 1;
+		} else {
+			player[l].x -= Loffset;
+			player[r].x += Roffset;
+		}
+		
+		// l, r 다시 그리기
+		switch(player[l].status) {
+		case READY: draw_ready_p(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		case WALK: draw_walk_a(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		case JUMP:
+		case DJUMP: draw_jump(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		case DEFENSE: draw_defense(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		case PUNCH: draw_punch(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		case KICK: draw_kick(player[l].x, player[l].y, player[l].direction == LEFT); break;
+		}
+		
+		switch(player[r].status) {
+		case READY: draw_ready_p(player[r].x, player[r].y, player[r].direction == LEFT); break;
+		case WALK: draw_walk_a(player[r].x, player[r].y, player[r].direction == LEFT); break;
+		case JUMP:
+		case DJUMP: draw_jump(player[r].x, player[r].y, player[r].direction == LEFT); break;
+		case DEFENSE: draw_defense(player[r].x, player[r].y, player[r].direction == LEFT); break;
+		case PUNCH: draw_punch(player[r].x, player[r].y, player[r].direction == LEFT); break;
+		case KICK: draw_kick(player[r].x, player[r].y, player[r].direction == LEFT); break;
 		}
 	}
 }
@@ -150,10 +220,9 @@ void game_next_step(uint8_t p) {
 		if(player[p].direction == LEFT) { if(player[p].x > 0) { player[p].x -= 6; } }
 		else { if(player[p].x < 105) { player[p].x += 6; } }
 	case JUMP: {
-		if(player[p].x > 105) { player[p].x = 105; }	// 오른쪽 벽에 붙어서 점프하면 밀려나도록
+		if(player[p].x > 99) { player[p].x = 99; }	// 오른쪽 벽에 붙어서 점프하면 밀려나도록
 		if(player[p].direction == LEFT) {
 			if(player[p].x < 6) { player[p].x = 0; }	// 왼쪽 벽에 붙어서 점프하면 밀려나도록
-			else { player[p].x -= 6; }
 		}
 		
 		// 점프 동작 수행
@@ -171,6 +240,7 @@ void game_next_step(uint8_t p) {
 			player[p].y = y < 0 ? 0 : y;
 			player[p].t += 1;
 			draw_jump(player[p].x, player[p].y, player[p].direction == LEFT);
+			collision_check();
 		}
 		break; }
 		
@@ -190,6 +260,8 @@ void game_next_step(uint8_t p) {
 		}
 		
 		draw_punch(player[p].x, player[p].y, player[p].direction == LEFT);
+		collision_check();
+		
 		if(player[p].direction == LEFT) { player[p].x += 6; }
 		
 		if(player[p].t == 2) { 
@@ -212,6 +284,8 @@ void game_next_step(uint8_t p) {
 		}
 		
 		draw_kick(player[p].x, player[p].y, player[p].direction == LEFT);
+		collision_check();
+		
 		if(player[p].direction == LEFT) { player[p].x += 12; }
 		
 		if(player[p].t == 3) { 

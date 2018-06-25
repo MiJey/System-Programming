@@ -55,8 +55,6 @@ static void game_timer_scheduler(void *p_event_data, uint16_t event_size) {
 	
 	if(game_time == 0) { game_finish_round(); }	// 게임 종료
 	else { game_time -= 1; }
-	
-	bsp_board_led_invert(0);
 }
 
 // 플레이어가 움직이는 타이머
@@ -76,8 +74,8 @@ void start_game_timer() {
 void start_player_timer(uint8_t p, uint8_t tick) {
 	app_timer_start(p == 0 ? m_p1_timer_id : m_p2_timer_id, APP_TIMER_TICKS(tick), NULL);
 }
-static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(100), NULL); }
-static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(100), NULL); }
+static void start_p1_timer() { app_timer_start(m_p1_timer_id, APP_TIMER_TICKS(300), NULL); }
+static void start_p2_timer() { app_timer_start(m_p2_timer_id, APP_TIMER_TICKS(300), NULL); }
 
 // stop timer
 void stop_game_timer() { app_timer_stop(m_game_timer_id); }
