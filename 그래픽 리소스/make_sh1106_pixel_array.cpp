@@ -1,3 +1,6 @@
+//w를 4의 배수로 맞워주어야한다.
+//image to binary web site : 
+//https://www.dcode.fr/binary-image
 #include <vector>
 
 using namespace std;
