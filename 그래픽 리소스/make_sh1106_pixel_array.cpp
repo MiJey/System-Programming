@@ -2,7 +2,7 @@
 //image to binary web site : 
 //https://www.dcode.fr/binary-image
 #include <vector>
-
+#include <iostream>
 using namespace std;
 
 int main() {
